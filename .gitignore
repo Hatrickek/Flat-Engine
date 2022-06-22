@@ -36,5 +36,5 @@
 /cmake-build-debug
 /.idea
 /x64
-/resources
+/resources/objects/vampire
 /resources/textures

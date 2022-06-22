@@ -48,7 +48,6 @@ namespace FlatEngine {
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 	{
 	}
-
 	template<>
 	void Scene::OnComponentAdded<MeshRendererComponent>(Entity entity, MeshRendererComponent& component)
 	{
@@ -64,5 +63,4 @@ namespace FlatEngine {
 		component.shader = Resources::GetDefaultShader();
 		component.primitive = CUBE;
 	}
-
 }

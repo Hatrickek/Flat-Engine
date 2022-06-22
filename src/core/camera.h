@@ -84,7 +84,7 @@ namespace FlatEngine {
 
 		// processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 		void ProcessKeyboard(CameraMovement direction, float deltaTime) {
-			if(cameraState == CAMERASTATE_EDITOR && !Input::GetMouseButtonDown(Mouse::Button1)) return;
+			//if(cameraState == CAMERASTATE_EDITOR && !Input::GetMouseButtonDown(Mouse::Button1)) return;
 			float velocity = MovementSpeed * deltaTime;
 			if (direction == FORWARD)
 				Position += Front * velocity;

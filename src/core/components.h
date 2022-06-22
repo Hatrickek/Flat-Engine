@@ -52,7 +52,7 @@ namespace FlatEngine {
 		}
 	};
 	struct MeshRendererComponent {
-		Ref<Model> model;
+		Ref<Model> model = nullptr;
 		glm::mat4 m_model = glm::mat4(1.0f);
 		Ref<Shader> shader;
 		glm::vec4 color = BLANK;
