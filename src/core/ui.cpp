@@ -18,6 +18,7 @@
 #include "window.h"
 #include "panels/sceneHPanel.h"
 #include "meth.h"
+
 //---------------------------------------------------
 //Imgui Functions
 namespace FlatEngine {
@@ -58,6 +59,7 @@ namespace FlatEngine {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void UI::RenderImgui() {
@@ -104,16 +106,20 @@ namespace FlatEngine {
 		Entity selectedEntity = SceneHPanel::GetSelectedEntity();
 		if (!selectedEntity && m_GizmoType == -1) return;
 		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::BeginFrame();
 		ImGuizmo::Enable(true);
 		//ImGuizmo::SetDrawlist();
-		//ImGuiIO& io = ImGui::GetIO();
-		ImGuizmo::SetRect(0,0, Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
 		const glm::mat4& cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
 		glm::mat4 cameraView = Editor::GetEditorCamera()->GetViewMatrix();
 		// Entity transform
-		auto& tc = selectedEntity.GetComponent<TransformComponent>();
-		glm::mat4 transform = tc.GetTransform();
+		glm::mat4 transform;
+		TransformComponent tc;
+		if(selectedEntity) {
+			tc = selectedEntity.GetComponent<TransformComponent>();
+			transform = tc.GetTransform();
+		}
 
 		// Snapping
 		bool snap = Input::GetKey(Key::LeftControl);
@@ -124,7 +130,7 @@ namespace FlatEngine {
 		float snapValues[3] = { snapValue, snapValue, snapValue };
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::WORLD, glm::value_ptr(transform),
 				nullptr, snap ? snapValues : nullptr);
 
 			if (ImGuizmo::IsUsing())

@@ -35,9 +35,9 @@ namespace FlatEngine {
 
 	struct TransformComponent
 	{
-		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
+		glm::vec3 Translation = glm::vec3(0);
+		glm::vec3 Rotation = glm::vec3(0);
+		glm::vec3 Scale = glm::vec3(1);
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
@@ -54,7 +54,7 @@ namespace FlatEngine {
 	struct MeshRendererComponent {
 		Ref<Model> model = nullptr;
 		glm::mat4 m_model = glm::mat4(1.0f);
-		Ref<Shader> shader;
+		Ref<Shader> shader = nullptr;
 		glm::vec4 color = BLANK;
 		MeshRendererComponent() = default;
 		MeshRendererComponent (Ref<Model> model, Ref<Shader> shader, glm::vec4 color)

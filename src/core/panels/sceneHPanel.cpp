@@ -87,7 +87,6 @@ namespace FlatEngine {
 		if (ImGui::IsItemClicked()) {
 			m_SelectionContext = entity;
 		}
-
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem()) {
 			if (ImGui::MenuItem("Delete Entity"))

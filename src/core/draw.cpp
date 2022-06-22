@@ -5,9 +5,7 @@ namespace FlatEngine {
 	void Draw::DrawModel(const MeshRendererComponent& mrc,glm::vec3 position, glm::vec3 scale,glm::vec3 rotation) {
 		glm::mat4 m_model = mrc.m_model;
 		m_model = glm::translate(m_model, position);
-		if(rotation.x != 0) m_model = glm::rotate(m_model, glm::radians(rotation.x), glm::vec3(1,0,0));
-		if(rotation.y != 0) m_model = glm::rotate(m_model, glm::radians(rotation.y), glm::vec3(0,1,0));
-		if(rotation.z != 0) m_model = glm::rotate(m_model, glm::radians(rotation.z), glm::vec3(0,0,1));
+		//if(rotation != 0.0f) m_model = glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f });
 		m_model = glm::scale(m_model, scale);
 		mrc.shader->setMat4("model", m_model);
 		mrc.shader->setVec4("color", mrc.color);
