@@ -59,7 +59,6 @@ namespace FlatEngine {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGuizmo::BeginFrame();
 	}
 
 	void UI::RenderImgui() {
@@ -103,13 +102,14 @@ namespace FlatEngine {
 		}
 	}
 	void UI::DrawGizmos() {
+		ImGuizmo::BeginFrame();
 		Entity selectedEntity = SceneHPanel::GetSelectedEntity();
 		if (!selectedEntity && m_GizmoType == -1) return;
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::Enable(true);
 		//ImGuizmo::SetDrawlist();
 		ImGuiIO& io = ImGui::GetIO();
-		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+		ImGuizmo::SetRect(0, 0, Window::SCR_WIDTH, Window::SCR_HEIGHT);
 
 		const glm::mat4& cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
 		glm::mat4 cameraView = Editor::GetEditorCamera()->GetViewMatrix();
@@ -130,7 +130,7 @@ namespace FlatEngine {
 		float snapValues[3] = { snapValue, snapValue, snapValue };
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::WORLD, glm::value_ptr(transform),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
 				nullptr, snap ? snapValues : nullptr);
 
 			if (ImGuizmo::IsUsing())

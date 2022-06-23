@@ -234,6 +234,9 @@ namespace FlatEngine {
 			auto& mesh	 = component.model;
 			auto& shader = component.shader;
 			auto& color	 = component.color;
+			auto& textures = component.model->textures_loaded; 
+			ImGui::Text("Model: %s",component.model->name.c_str());
+			ImGui::Text("Textures: %d",textures.size());
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));
 		});
 		DrawComponent<PrimitiveRendererComponent>("Primitive Renderer", entity, [](auto& component)
@@ -241,7 +244,7 @@ namespace FlatEngine {
 			auto& primitive = component.primitive;
 			auto& shader = component.shader;
 			auto& color	 = component.color;
-			const char* primitives[] = {"CUBE", "QUAD","EMPTY"};
+			const char* primitives[] = {"QUAD", "CUBE","EMPTY"};
 			static int selected_primitive = 1;
 			ImGui::Combo("Primitive", &selected_primitive, primitives, FE_ARRAYSIZE(primitives));
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));

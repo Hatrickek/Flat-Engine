@@ -14,21 +14,21 @@ namespace FlatEngine {
 		}
 		mrc.shader->setVec4("color", BLANK);
 	}
-	void Draw::DrawPrimitive(PrimitiveRendererComponent& prc, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
-		switch(prc.primitive) {
-		case CUBE:
-			DrawCube(*prc.shader, prc.color, position, scale, rotation);
-			break;
-		case QUAD:
-			//DrawQuad();
-			break;
-		case NONE:
+	void Draw::DrawPrimitive(const PrimitiveRendererComponent& prc, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
+		DrawCube(*prc.shader, prc.color, position, scale, rotation);
+		//switch(prc.primitive) {
+		//case CUBE:
+		//	break;
+		//case QUAD:
+		//	//DrawQuad();
+		//	break;
+		//case NONE:
 
-			break;
-		default:
-			DrawCube(*prc.shader, prc.color, position, scale, rotation);
-			break;
-		}
+		//	break;
+		//default:
+		//	//DrawCube(*prc.shader, prc.color, position, scale, rotation);
+		//	break;
+		//}
 	}
 	glm::mat4 Draw::DrawCube(Shader& shader,glm::vec4 color,glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
 		glm::mat4 m_model = glm::mat4(1.0f);

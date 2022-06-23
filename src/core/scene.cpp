@@ -22,28 +22,25 @@ namespace FlatEngine {
 		m_Registry.destroy(entity);
 	}
 	void Scene::OnUpdate(float deltaTime) {
-		//Render mesh components
 		{
-			auto group= m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
-			for(auto entity : group) {
+			const auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
+			for(const auto entity : group) {
 				auto [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
 				Draw::DrawModel(meshrenderer, transform.Translation, transform.Scale, transform.Rotation);
 			}
 		}
 		{
-			auto group = m_Registry.group<TransformComponent>(entt::get<PrimitiveRendererComponent>);
-			for(auto entity : group ) {
-				auto [transform, primitiveRenderer] = group.get<TransformComponent, PrimitiveRendererComponent>(entity);
-				Draw::DrawPrimitive(primitiveRenderer, transform.Translation, transform.Scale, transform.Rotation);
+			const auto group = m_Registry.view<TransformComponent, PrimitiveRendererComponent>();
+			for(auto entity : group) {
+				auto [transform, prc] = group.get<TransformComponent, PrimitiveRendererComponent>(entity);
+				Draw::DrawPrimitive(prc, transform.Translation, transform.Scale, transform.Rotation);
 			}
 		}
 	}
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
-		
 	}
-
 	template<>
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 	{
