@@ -21,9 +21,11 @@ namespace FlatEngine{
 		static void DrawDebugPanel();
 		static void DrawGizmos();
 	private:
-		static void ImGuiTheme();
 		static void OpenScene();
 		static void OpenScene(const std::filesystem::path& path);
 		static void SaveSceneAs();
+		static void SettingsMenu();
+		static void ImGuiDarkTheme();
+		static void ImGuiWhiteTheme();
 	};
 }
