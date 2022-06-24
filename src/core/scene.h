@@ -11,7 +11,7 @@ namespace FlatEngine{
 		~Scene();
 		Entity CreateEntity(const std::string& name);
 		void DestroyEntity(Entity entity);
-
+		Entity DuplicateEntity(Entity entity);
 		void OnUpdate(float deltaTime);
 
 		entt::registry m_Registry;

@@ -18,7 +18,6 @@
 #include "window.h"
 #include "panels/sceneHPanel.h"
 #include "meth.h"
-
 //---------------------------------------------------
 //Imgui Functions
 namespace FlatEngine {
@@ -37,6 +36,7 @@ namespace FlatEngine {
 		//io.ConfigViewportsNoTaskBarIcon = true;
 
 		ImGui::StyleColorsDark();
+		ImGuiTheme();
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -46,7 +46,6 @@ namespace FlatEngine {
 
 		io.Fonts->AddFontFromFileTTF("resources/fonts/Roboto-Medium.ttf", 16.0f);
 		io.Fonts->AddFontDefault();
-		IM_ASSERT(font != NULL);
 		io.Fonts->Build();
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -92,8 +91,9 @@ namespace FlatEngine {
 	static wchar_t* SaveFileDialog();
 	static int m_GizmoType = -1;
 	void UI::DrawEditorUI() {
-		DrawGizmos();
 		ShowImguiDockSpace();
+		DrawGizmos();
+		//DrawViewport();
 		DrawImguiPerformanceOverlay();
 		if (GetEngineState() == EDITING) {
 			DrawDebugPanel();
@@ -101,6 +101,23 @@ namespace FlatEngine {
 			DrawConsoleWindow();
 		}
 	}
+	static glm::vec2 m_ViewportBounds[2];
+	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+	void UI::DrawViewport() {
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		//uint64_t textureID = m_gBuffer->id;
+		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+	}
+
 	void UI::DrawGizmos() {
 		ImGuizmo::BeginFrame();
 		Entity selectedEntity = SceneHPanel::GetSelectedEntity();
@@ -465,5 +482,56 @@ namespace FlatEngine {
 			pfsd->Release();
 		}
 		return nullptr;
+	}
+	void UI::ImGuiTheme() {
+		ImGui::StyleColorsDark();
+	    ImGuiStyle* style = &ImGui::GetStyle();
+	    /*style->WindowBorderSize = 0;
+	    style->WindowPadding = ImVec2(15, 15);
+		style->WindowRounding = 5.0f;
+		style->FramePadding = ImVec2(5, 5);
+		style->FrameRounding = 3.0f;
+		style->ItemSpacing = ImVec2(12, 8);
+		style->ItemInnerSpacing = ImVec2(8, 6);
+		style->IndentSpacing = 25.0f;
+		style->ScrollbarSize = 15.0f;
+		style->ScrollbarRounding = 9.0f;
+		style->GrabMinSize = 5.0f;
+		style->GrabRounding = 3.0f;*/
+		
+		style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+		style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
+		style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+		style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+		style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+		style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+		style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
+		style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+		style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+		style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+		style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+		style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_Button] = ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(1.000f, 0.114f, 0.114f, 1.000f);
+		style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.431f, 0.000f, 0.000f, 1.000f);
+		style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+		style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+		style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+		style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
+		style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_PlotHistogram] = ImVec4(1.000f, 0.271f, 0.000f, 0.631f);
+		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
+		style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0, 0, 0, 0.73f);
+	    style->Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0, 0, 0, 0.73f);
 	}
 }
