@@ -7,17 +7,18 @@
 #include <ShObjIdl.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "core.h"
-#include "editor.h"
-#include "entity.h"
+#include "core/core.h"
+#include "core/editor.h"
+#include "core/entity.h"
 #include "level.h" //TODO: this is temporary import for accesing the lighting properties.
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "ssao.h"
-#include "utility.h"
-#include "window.h"
+#include "core/ssao.h"
+#include "core/utility.h"
+#include "core/window.h"
 #include "panels/sceneHPanel.h"
 #include "meth.h"
+#include "uiutils.h"
 //---------------------------------------------------
 //Imgui Functions
 namespace FlatEngine {
@@ -87,13 +88,11 @@ namespace FlatEngine {
 	static bool performance_overlay = true;
 	static bool inspector_window = true;
 	static bool console_window = true;
-	static wchar_t* OpenFileDialog();
-	static wchar_t* SaveFileDialog();
 	static int m_GizmoType = -1;
 	void UI::DrawEditorUI() {
 		ShowImguiDockSpace();
 		DrawGizmos();
-		//DrawViewport();
+		DrawViewport();
 		DrawImguiPerformanceOverlay();
 		if (GetEngineState() == EDITING) {
 			DrawDebugPanel();
@@ -116,6 +115,7 @@ namespace FlatEngine {
 		//uint64_t textureID = m_gBuffer->id;
 		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+		ImGui::PopStyleVar();
 	}
 
 	void UI::DrawGizmos() {
@@ -312,12 +312,15 @@ namespace FlatEngine {
 			if (ImGui::BeginMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("Open Scene")) {
-						OpenFileDialog();
+						OpenScene();
 					}
 					if (ImGui::MenuItem("Save Scene")) {
-						SaveFileDialog();
+						FE_LOG_WARN("NOT IMPLEMENTED");
+						//SaveScene();
 					}
-					ImGui::MenuItem("Save Scene As...");
+					if(ImGui::MenuItem("Save Scene As...")){
+						SaveSceneAs();
+					}
 					if (ImGui::MenuItem("Exit")) {
 						Window::ExitWindow(Window::GetOpenGLWindow());
 					}
@@ -325,7 +328,9 @@ namespace FlatEngine {
 				}
 				if (ImGui::BeginMenu("Edit")) {
 					if (ImGui::MenuItem("Settings")) {
-						//TODO: Add settings menu
+						ImGui::Begin("Settings");
+						
+						ImGui::End();
 					}
 					ImGui::EndMenu();
 				}
@@ -361,128 +366,38 @@ namespace FlatEngine {
 		}
 		ImGui::End();
 	}
-
-	//-------------------------------
-	//Windows functions
-	const COMDLG_FILTERSPEC m_file_types[] =
+	void UI::OpenScene()
 	{
-		{L"Scene file (*.scene)", L"*.scene"},
-	};
-	//TODO: IMPORTANT This functions leak memory
-	static wchar_t* OpenFileDialog() {
-		HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-		PWSTR pszFilePath{};
-		if (SUCCEEDED(hr)) {
-			IFileOpenDialog* pFileOpen;
-
-			// Create the FileOpenDialog object.
-			hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog,
-			                      reinterpret_cast<void**>(&pFileOpen));
-
-			//Set the file extension
-			hr = pFileOpen->SetFileTypes(ARRAYSIZE(m_file_types), m_file_types);
-			hr = pFileOpen->SetFileTypeIndex(1);
-			hr = pFileOpen->SetDefaultExtension(L"scene");
-
-			if (SUCCEEDED(hr)) {
-				// Show the Open dialog box.
-				hr = pFileOpen->Show(NULL);
-				// Get the file name from the dialog box.
-				if (SUCCEEDED(hr)) {
-					IShellItem* pItem;
-					hr = pFileOpen->GetResult(&pItem);
-					if (SUCCEEDED(hr)) {
-
-						hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-
-						// Display the file name to the user.
-						if (SUCCEEDED(hr)) {
-							MessageBoxW(NULL, pszFilePath, L"File Path", MB_OK);
-							CoTaskMemFree(pszFilePath);
-						}
-						pItem->Release();
-					}
-				}
-				pFileOpen->Release();
-			}
-			CoUninitialize();
-		}
-		return pszFilePath;
+		std::string filepath = FileDialogs::OpenFile("FlatEngine Scene (*.scene)\0*.scene\0");
+		if (!filepath.empty())
+			OpenScene(filepath);
 	}
-
-	static wchar_t* SaveFileDialog() {
-		//TODO: Right now it has now use except opening a save window.
-		IFileSaveDialog* pfsd = NULL;
-		HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfsd));
-		if (SUCCEEDED(hr)) {
-			// Create an event handling object, and hook it up to the dialog.
-			//IFileDialogEvents   *pfde       = NULL;
-			DWORD dwCookie = 0;
-
-			if (SUCCEEDED(hr)) {
-				// Hook up the event handler.
-				//  hr = pfsd->Advise(pfde, &dwCookie);
-				if (SUCCEEDED(hr)) {
-					// Set the file types to display.
-					hr = pfsd->SetFileTypes(ARRAYSIZE(m_file_types), m_file_types);
-					if (SUCCEEDED(hr)) {
-						hr = pfsd->SetFileTypeIndex(1);
-						if (SUCCEEDED(hr)) {
-							hr = pfsd->SetDefaultExtension(L"doc");
-							if (SUCCEEDED(hr)) {
-								//IPropertyStore *pps = NULL;
-
-								// The InMemory Property Store is a Property Store that is
-								// kept in the memory instead of persisted in a file stream.
-								//hr = PSCreateMemoryPropertyStore(IID_PPV_ARGS(&pps));
-								if (SUCCEEDED(hr)) {
-									PROPVARIANT propvarValue = {};
-									//hr = InitPropVariantFromString(L"SampleKeywordsValue", &propvarValue);
-									if (SUCCEEDED(hr)) {
-										// Set the value to the property store of the item.
-										//hr = pps->SetValue(PKEY_Keywords, propvarValue);
-										if (SUCCEEDED(hr)) {
-											// Commit does the actual writing back to the in memory store.
-											//hr = pps->Commit();
-											if (SUCCEEDED(hr)) {
-												// Hand these properties to the File Dialog.
-												//hr = pfsd->SetCollectedProperties(NULL, TRUE);
-												if (SUCCEEDED(hr)) {
-													//hr = pfsd->SetProperties(pps);
-												}
-											}
-										}
-										//PropVariantClear(&propvarValue);
-									}
-									//pps->Release();
-								}
-							}
-						}
-					}
-
-					if (FAILED(hr)) {
-						// Unadvise here in case we encounter failures before we get a chance to show the dialog.
-						pfsd->Unadvise(dwCookie);
-					}
-				}
-				//pfde->Release();
-			}
-
-			if (SUCCEEDED(hr)) {
-				// Now show the dialog.
-				hr = pfsd->Show(NULL);
-				if (SUCCEEDED(hr)) {
-					//
-					// You can add your own code here to handle the results.
-					//
-				}
-				// Unhook the event handler.
-				pfsd->Unadvise(dwCookie);
-			}
-			pfsd->Release();
+	void UI::OpenScene(const std::filesystem::path& path)
+	{
+		if (path.extension().string() != ".scene")
+		{
+			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
+			return;
 		}
-		return nullptr;
+		//Ref<Scene> newScene = CreateRef<Scene>();
+		//SceneSerializer serializer(newScene);
+		//if (serializer.Deserialize(path.string()))
+		//{
+		//	m_ActiveScene = newScene;
+		//	m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		//	m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		//}
 	}
+	void UI::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("FlatEngine Scene (*.scene)\0*.scene\0");
+		if (!filepath.empty())
+		{
+			//SceneSerializer serializer(m_ActiveScene);
+			//serializer.Serialize(filepath);
+		}
+	}
+	
 	void UI::ImGuiTheme() {
 		ImGui::StyleColorsDark();
 	    ImGuiStyle* style = &ImGui::GetStyle();

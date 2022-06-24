@@ -15,7 +15,7 @@ namespace FlatEngine {
 	#define BLANK glm::vec4(0,0,0,0)
 	#define RED   glm::vec4(1,0,0,1)
 	#define GREEN glm::vec4(0,1,0,1)
-	#define BLUE  glm::vec4(0,0,1,1)
+	#define BLUE  glm::vec4(0,0,1,1
 
 	enum Primitive {
 		NONE,

@@ -24,7 +24,6 @@
 #include "core/editor.h"
 #include "core/gbuffer.h"
 #include "core/scene.h"
-using namespace FlatEngine;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -32,7 +31,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void ProcessInput(GLFWwindow* window);
 
 // camera
-Camera camera;
+FlatEngine::Camera camera;
 float lastX = (float)FlatEngine::Window::SCR_WIDTH / 2.0;
 float lastY = (float)FlatEngine::Window::SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -50,14 +49,14 @@ int main() {
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);  
-	Editor::OnInit();
-	UI::InitUI(Window::GetOpenGLWindow());
+	FlatEngine::Editor::OnInit();
+	FlatEngine::UI::InitUI(FlatEngine::Window::GetOpenGLWindow());
 
 	// build and compile shaders
-	Shader shader_ssao_geometry_pass("resources/shaders/ssao_geometry.vs", "resources/shaders/ssao_geometry.fs");
-	Shader shader_lighting_pass("resources/shaders/ssao.vs", "resources/shaders/ssao_lighting.fs");
-	Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
-	Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
+	FlatEngine::Shader shader_ssao_geometry_pass("resources/shaders/ssao_geometry.vs", "resources/shaders/ssao_geometry.fs");
+	FlatEngine::Shader shader_lighting_pass("resources/shaders/ssao.vs", "resources/shaders/ssao_lighting.fs");
+	FlatEngine::Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
+	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
 
 	// load models
 	//Model patrick_model(FileSystem::getPath("resources/objects/patrick_animated/patrick_animated.obj"));
@@ -83,7 +82,7 @@ int main() {
 	
 	// render loop
 	// -----------
-	camera = *Editor::GetEditorCamera();
+	camera = *FlatEngine::Editor::GetEditorCamera();
 
 	camera.SetPosition(glm::vec3(1,1,3));
 
@@ -116,10 +115,10 @@ int main() {
 		shader_ssao_geometry_pass.setMat4("view", view);
 
 		shader_ssao_geometry_pass.setInt("invertedNormals", 1);
-		Draw::DrawCube(shader_ssao_geometry_pass, WHITE,glm::vec3(0.0, 7.0f, 0.0f), glm::vec3(7.5f, 7.5f, 7.5f));
+		FlatEngine::Draw::DrawCube(shader_ssao_geometry_pass, WHITE,glm::vec3(0.0, 7.0f, 0.0f), glm::vec3(7.5f, 7.5f, 7.5f));
 		shader_ssao_geometry_pass.setInt("invertedNormals", 0);
 
-		Editor::OnUpdate();
+		FlatEngine::Editor::OnUpdate();
 		
 		//Draw the lights as cubes
 		for (unsigned int i = 0; i < lightPositions.size(); i++) {
@@ -127,17 +126,17 @@ int main() {
 			model = glm::translate(model, glm::vec3(lightPositions[i]));
 			model = glm::scale(model, glm::vec3(0.1f));
 			shader_ssao_geometry_pass.setMat4("model", model);
-			Draw::DrawCube(shader_ssao_geometry_pass, glm::vec4(lightColors[i], 1), lightPositions[i], glm::vec3(.1,.1,.1));
+			FlatEngine::Draw::DrawCube(shader_ssao_geometry_pass, glm::vec4(lightColors[i], 1), lightPositions[i], glm::vec3(.1,.1,.1));
 		}
 		m_gBuffer->End();
 
 		m_ssao->BeginSSAOTexture(projection, m_gBuffer->gPosition, m_gBuffer->gNormal);
-		Draw::render_quad();
+		FlatEngine::Draw::render_quad();
 		m_ssao->EndSSAOTexture();
 
 		// 3. blur SSAO texture to remove noise
 		m_ssao->BeginSSAOBlurTexture();
-		Draw::render_quad();
+		FlatEngine::Draw::render_quad();
 		m_ssao->EndSSAOBlurTexture();
 
 		//TODO: Lighting class 
@@ -161,7 +160,7 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gAlbedo);
 		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
 		glBindTexture(GL_TEXTURE_2D, m_ssao->ssaoColorBufferBlur);
-		Draw::render_quad();
+		FlatEngine::Draw::render_quad();
 
 		FlatEngine::UI::DrawEditorUI();
 
@@ -192,13 +191,13 @@ void ProcessInput(GLFWwindow* window) {
 	}
 
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::W))
-		camera.ProcessKeyboard(FORWARD, FlatEngine::Timestep::GetDeltaTime());
+		camera.ProcessKeyboard(FlatEngine::FORWARD, FlatEngine::Timestep::GetDeltaTime());
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::S))
-		camera.ProcessKeyboard(BACKWARD, FlatEngine::Timestep::GetDeltaTime());
+		camera.ProcessKeyboard(FlatEngine::BACKWARD, FlatEngine::Timestep::GetDeltaTime());
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::A))
-		camera.ProcessKeyboard(LEFT, FlatEngine::Timestep::GetDeltaTime());
+		camera.ProcessKeyboard(FlatEngine::LEFT, FlatEngine::Timestep::GetDeltaTime());
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::D))
-		camera.ProcessKeyboard(RIGHT, FlatEngine::Timestep::GetDeltaTime());
+		camera.ProcessKeyboard(FlatEngine::RIGHT, FlatEngine::Timestep::GetDeltaTime());
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

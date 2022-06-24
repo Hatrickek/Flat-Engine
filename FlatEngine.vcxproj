@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\panels\sceneHPanel.cpp" />
+    <ClCompile Include="src\core\ui\panels\sceneHPanel.cpp" />
     <ClCompile Include="src\core\core.cpp" />
     <ClCompile Include="src\core\draw.cpp" />
     <ClCompile Include="src\core\editor.cpp" />
@@ -31,7 +31,8 @@
     <ClCompile Include="src\core\scene.cpp" />
     <ClCompile Include="src\core\ssao.cpp" />
     <ClCompile Include="src\core\texture.cpp" />
-    <ClCompile Include="src\core\ui.cpp" />
+    <ClCompile Include="src\core\ui\ui.cpp" />
+    <ClCompile Include="src\core\ui\uiutils.cpp" />
     <ClCompile Include="src\core\window.cpp" />
     <ClCompile Include="src\level.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -53,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\a\includes\GLFW\glfw3.h" />
-    <ClInclude Include="src\core\panels\sceneHPanel.h" />
+    <ClInclude Include="src\core\ui\panels\sceneHPanel.h" />
     <ClInclude Include="src\core\animation.h" />
     <ClInclude Include="src\core\animator.h" />
     <ClInclude Include="src\core\camera.h" />
@@ -76,7 +77,8 @@
     <ClInclude Include="src\core\ssao.h" />
     <ClInclude Include="src\core\texture.h" />
     <ClInclude Include="src\core\timestep.h" />
-    <ClInclude Include="src\core\ui.h" />
+    <ClInclude Include="src\core\ui\ui.h" />
+    <ClInclude Include="src\core\ui\uiutils.h" />
     <ClInclude Include="src\core\utility.h" />
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\input.h" />

@@ -27,7 +27,7 @@ namespace FlatEngine {
 		template<typename T>
 		T& GetComponent()
 		{
-			//if(!HasComponent<T>()) return false;
+			if(!HasComponent<T>()) FE_LOG_ERROR("Entity does not have component!");
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);
 		}
 

@@ -71,7 +71,7 @@
     <ClCompile Include="src\level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ui.cpp">
+    <ClCompile Include="src\core\ui\ui.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\input.cpp">
@@ -107,7 +107,7 @@
     <ClCompile Include="src\core\draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\panels\sceneHPanel.cpp">
+    <ClCompile Include="src\core\ui\panels\sceneHPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\resources.cpp">
@@ -130,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="vendor\ImGuizmo\GraphEditor.cpp">
       <Filter>vendor\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ui\uiutils.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,7 +268,7 @@
     <ClInclude Include="vendor\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>vendor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ui.h">
+    <ClInclude Include="src\core\ui\ui.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\draw.h">
@@ -322,7 +325,7 @@
     <ClInclude Include="src\core\FlatEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\panels\sceneHPanel.h">
+    <ClInclude Include="src\core\ui\panels\sceneHPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\resources.h">
@@ -348,6 +351,9 @@
     </ClInclude>
     <ClInclude Include="vendor\ImGuizmo\GraphEditor.h">
       <Filter>vendor\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ui\uiutils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
