@@ -88,10 +88,12 @@ namespace FlatEngine {
 			m_SelectionContext = entity;
 		}
 		bool entityDeleted = false;
+		bool entityDuplicated = false;
 		if (ImGui::BeginPopupContextItem()) {
 			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
-
+			if (ImGui::MenuItem("Duplicate Entity"))
+				entityDuplicated = true;
 			ImGui::EndPopup();
 		}
 
@@ -108,6 +110,10 @@ namespace FlatEngine {
 			m_Scene->DestroyEntity(entity);
 			if (m_SelectionContext == entity)
 				m_SelectionContext = {};
+		}
+		if (entityDuplicated) {
+			Entity ent = m_Scene->DuplicateEntity(entity);
+			m_SelectionContext = ent;
 		}
 	}
 	
