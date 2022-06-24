@@ -21,6 +21,20 @@ namespace FlatEngine {
 	{
 		m_Registry.destroy(entity);
 	}
+	Entity Scene::DuplicateEntity(Entity entity){
+		const std::string name = std::format("{} Copy", entity.GetComponent<TagComponent>().Tag);
+		Entity newEntity = CreateEntity(name);
+		newEntity.GetComponent<TransformComponent>() = entity.GetComponent<TransformComponent>();
+		if(entity.HasComponent<MeshRendererComponent>()) {
+			newEntity.AddComponent<MeshRendererComponent>();
+			newEntity.GetComponent<MeshRendererComponent>() = entity.GetComponent<MeshRendererComponent>();
+		}
+		if(entity.HasComponent<PrimitiveRendererComponent>()) {
+			newEntity.AddComponent<PrimitiveRendererComponent>();
+			newEntity.GetComponent<PrimitiveRendererComponent>() = entity.GetComponent<PrimitiveRendererComponent>();
+		}
+		return newEntity;
+	}
 	void Scene::OnUpdate(float deltaTime) {
 		{
 			const auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
