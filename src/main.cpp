@@ -11,7 +11,7 @@
 #include <random>
 
 #include "core/draw.h"
-#include "core/ui.h"
+#include "core/ui/ui.h"
 #include "core/input.h"
 #include "core/animation.h"
 #include "core/animator.h"

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\sceneSerializer.cpp" />
     <ClCompile Include="src\core\ui\panels\sceneHPanel.cpp" />
     <ClCompile Include="src\core\core.cpp" />
     <ClCompile Include="src\core\draw.cpp" />
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\a\includes\GLFW\glfw3.h" />
+    <ClInclude Include="src\core\sceneSerializer.h" />
     <ClInclude Include="src\core\ui\panels\sceneHPanel.h" />
     <ClInclude Include="src\core\animation.h" />
     <ClInclude Include="src\core\animator.h" />
@@ -126,6 +128,25 @@
     <ClInclude Include="vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="vendor\stb_image.h" />
+    <ClInclude Include="vendor\yaml-cpp\anchor.h" />
+    <ClInclude Include="vendor\yaml-cpp\binary.h" />
+    <ClInclude Include="vendor\yaml-cpp\depthguard.h" />
+    <ClInclude Include="vendor\yaml-cpp\dll.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitter.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitterdef.h" />
+    <ClInclude Include="vendor\yaml-cpp\emittermanip.h" />
+    <ClInclude Include="vendor\yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="vendor\yaml-cpp\eventhandler.h" />
+    <ClInclude Include="vendor\yaml-cpp\exceptions.h" />
+    <ClInclude Include="vendor\yaml-cpp\mark.h" />
+    <ClInclude Include="vendor\yaml-cpp\noexcept.h" />
+    <ClInclude Include="vendor\yaml-cpp\null.h" />
+    <ClInclude Include="vendor\yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="vendor\yaml-cpp\parser.h" />
+    <ClInclude Include="vendor\yaml-cpp\stlemitter.h" />
+    <ClInclude Include="vendor\yaml-cpp\traits.h" />
+    <ClInclude Include="vendor\yaml-cpp\yaml.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -188,12 +209,13 @@
       <AdditionalIncludeDirectories>vendor;src;vendor\imgui;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -207,6 +229,7 @@
       <AdditionalIncludeDirectories>vendor;src;vendor\imgui;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -214,7 +237,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -226,12 +249,13 @@
       <AdditionalIncludeDirectories>vendor;src;vendor\imgui;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -245,6 +269,7 @@
       <AdditionalIncludeDirectories>vendor;src;vendor\imgui;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -252,7 +277,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

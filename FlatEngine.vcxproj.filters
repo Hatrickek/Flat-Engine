@@ -36,6 +36,9 @@
     <Filter Include="vendor\imguizmo">
       <UniqueIdentifier>{cb730761-a08f-4e2e-8e07-4e3ebbdb8604}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\yaml">
+      <UniqueIdentifier>{1283594a-07e1-469c-9feb-2c83b868d1d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -132,6 +135,9 @@
       <Filter>vendor\imguizmo</Filter>
     </ClCompile>
     <ClCompile Include="src\core\ui\uiutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\sceneSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -354,6 +360,66 @@
     </ClInclude>
     <ClInclude Include="src\core\ui\uiutils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\sceneSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\anchor.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\binary.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\depthguard.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\dll.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\emitfromevents.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\emitter.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\emitterdef.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\emittermanip.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\emitterstyle.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\eventhandler.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\exceptions.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\mark.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\noexcept.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\null.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\ostream_wrapper.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\parser.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\stlemitter.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\traits.h">
+      <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\yaml-cpp\yaml.h">
+      <Filter>vendor\yaml</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

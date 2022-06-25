@@ -25,6 +25,7 @@ namespace FlatEngine {
 		std::vector<Texture> textures_loaded;
 		std::vector<Mesh> meshes;
 		std::string directory;
+		std::string m_Path;
 		std::string name = "model";
 		bool gammaCorrection;
 	
@@ -49,10 +50,11 @@ namespace FlatEngine {
 			// check for errors
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
-				FE_LOG_ERROR("{}",importer.GetErrorString());
+				FE_LOG_ERROR("Model importer error: {}",importer.GetErrorString());
 				return;
 			}
 			// retrieve the directory path of the filepath
+			m_Path = path;
 			directory = path.substr(0, path.find_last_of('/'));
 			name = path.substr(path.find_last_of("/\\") + 1);
 

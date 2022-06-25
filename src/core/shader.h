@@ -16,9 +16,15 @@ namespace FlatEngine {
 	{
 	public:
 		unsigned int ID;
-		Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
+		std::string m_vertexPath;
+		std::string m_fragmentPath;
+		std::string m_geometryPath;
+
+		Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr){
 		{
-        
+			if(vertexPath)m_vertexPath = vertexPath;
+			if(fragmentPath)m_fragmentPath = fragmentPath;
+			if(geometryPath)m_geometryPath = geometryPath;
 			std::string vertexCode;
 			std::string fragmentCode;
 			std::string geometryCode;
@@ -95,7 +101,8 @@ namespace FlatEngine {
 			if(geometryPath != nullptr)
 				glDeleteShader(geometry);
 
-		}
+		}	
+	}
 		// activate the shader
 		// ------------------------------------------------------------------------
 		void use() 

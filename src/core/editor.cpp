@@ -39,6 +39,9 @@ namespace FlatEngine {
 	Ref<Scene> Editor::GetActiveScene() {
 		return m_ActiveScene;
 	}
+	void Editor::SetActiveScene(Ref<Scene> scene) {
+		m_ActiveScene = scene;
+	}
 	Ref<Camera> Editor::GetEditorCamera() {
 		return m_EditorCamera;
 	}

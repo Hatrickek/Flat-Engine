@@ -19,6 +19,7 @@
 #include "panels/sceneHPanel.h"
 #include "meth.h"
 #include "uiutils.h"
+#include "core/sceneSerializer.h"
 //---------------------------------------------------
 //Imgui Functions
 namespace FlatEngine {
@@ -92,7 +93,7 @@ namespace FlatEngine {
 	void UI::DrawEditorUI() {
 		ShowImguiDockSpace();
 		DrawGizmos();
-		DrawViewport();
+		//DrawViewport();
 		DrawImguiPerformanceOverlay();
 		if (GetEngineState() == EDITING) {
 			DrawDebugPanel();
@@ -402,22 +403,21 @@ namespace FlatEngine {
 			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
 		}
-		//Ref<Scene> newScene = CreateRef<Scene>();
-		//SceneSerializer serializer(newScene);
-		//if (serializer.Deserialize(path.string()))
-		//{
-		//	m_ActiveScene = newScene;
-		//	m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		//	m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-		//}
+		Ref<Scene> newScene = CreateRef<Scene>();
+		SceneSerializer serializer(newScene);
+		if (serializer.Deserialize(path.string()))
+		{
+			Editor::SetActiveScene(newScene);
+			SceneHPanel::SetScene(Editor::GetActiveScene());
+		}
 	}
 	void UI::SaveSceneAs()
 	{
 		std::string filepath = FileDialogs::SaveFile("FlatEngine Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty())
 		{
-			//SceneSerializer serializer(m_ActiveScene);
-			//serializer.Serialize(filepath);
+			SceneSerializer serializer(Editor::GetActiveScene());
+			serializer.Serialize(filepath);
 		}
 	}
 	

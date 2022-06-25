@@ -58,7 +58,7 @@ namespace FlatEngine {
 		glm::vec4 color = BLANK;
 		MeshRendererComponent() = default;
 		MeshRendererComponent (Ref<Model> model, Ref<Shader> shader, glm::vec4 color)
-		: model(std::move(model)), shader(std::move(shader)), color(color){} 
+		: model(std::move(model)), shader(std::move(shader)), color(color){}
 	};
 	struct PrimitiveRendererComponent {
 		Primitive primitive = CUBE;
