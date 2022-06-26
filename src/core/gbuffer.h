@@ -8,8 +8,7 @@ namespace FlatEngine {
 	class GBuffer {
 	public:
 		unsigned int gbufferID;
-		unsigned int gPosition, gNormal, gAlbedo;
-
+		unsigned int gPosition, gNormal, gAlbedo, rboDepth;
 		GBuffer(unsigned int width, unsigned int height) {
 			m_width  = width;
 			m_height = height;
@@ -46,7 +45,6 @@ namespace FlatEngine {
 			unsigned int attachments[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 			glDrawBuffers(3, attachments);
 			// create and attach depth buffer (renderbuffer)
-			unsigned int rboDepth;
 			glGenRenderbuffers(1, &rboDepth);
 			glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
@@ -74,6 +72,7 @@ namespace FlatEngine {
 		    glDeleteTextures(1, &gAlbedo);
 		    glDeleteTextures(1, &gNormal);
 		    glDeleteTextures(1, &gPosition);
+			glDeleteBuffers(1, &rboDepth);
 		}
 	private:
 		unsigned int m_width;
