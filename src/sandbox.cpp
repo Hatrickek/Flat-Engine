@@ -24,7 +24,9 @@
 #include "core/editor.h"
 #include "core/gbuffer.h"
 #include "core/scene.h"
+#include "sandbox.h"
 
+#include "core/framebuffer.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -38,6 +40,7 @@ bool firstMouse = true;
 
 std::shared_ptr<FlatEngine::SSAO> m_ssao;
 std::shared_ptr<FlatEngine::GBuffer> m_gBuffer;
+std::shared_ptr<FlatEngine::FBuffer> m_fBuffer;
 int main() {
 	// glfw: initialize and configure
 	FlatEngine::Log::Init();
@@ -58,14 +61,8 @@ int main() {
 	FlatEngine::Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
 	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
 
-	// load models
-	//Model patrick_model(FileSystem::getPath("resources/objects/patrick_animated/patrick_animated.obj"));
-	//Animation patrick_animation(FileSystem::getPath("resources/objects/patrick_animated/patrick_animated.obj"), &patrick_model);
-	//Animator patrick_animator(&patrick_animation);
-
-	//Model rsr_model(FileSystem::getPath("resources/objects/911rsr.obj"));
-
 	m_gBuffer = std::make_shared<FlatEngine::GBuffer>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
+	m_fBuffer = std::make_shared<FlatEngine::FBuffer>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
 
 	m_ssao = std::make_shared<FlatEngine::SSAO>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
 	m_ssao->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
@@ -86,8 +83,6 @@ int main() {
 
 	camera.SetPosition(glm::vec3(1,1,3));
 
-	
-
 	while (!glfwWindowShouldClose(FlatEngine::Window::GetOpenGLWindow())) {
 		glfwPollEvents();
 
@@ -106,7 +101,10 @@ int main() {
 
 		// 1. geometry pass: render scene's geometry/color data into gbuffer
 		// -----------------------------------------------------------------
+		
 		m_gBuffer->Begin();
+		
+
 		glm::mat4 projection = camera.GetProjectionMatrix();
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
@@ -129,14 +127,14 @@ int main() {
 			FlatEngine::Draw::DrawCube(shader_ssao_geometry_pass, glm::vec4(lightColors[i], 1), lightPositions[i], glm::vec3(.1,.1,.1));
 		}
 		m_gBuffer->End();
-
+		
 		m_ssao->BeginSSAOTexture(projection, m_gBuffer->gPosition, m_gBuffer->gNormal);
-		FlatEngine::Draw::render_quad();
+		FlatEngine::Draw::RenderQuad();
 		m_ssao->EndSSAOTexture();
 
 		// 3. blur SSAO texture to remove noise
 		m_ssao->BeginSSAOBlurTexture();
-		FlatEngine::Draw::render_quad();
+		FlatEngine::Draw::RenderQuad();
 		m_ssao->EndSSAOBlurTexture();
 
 		//TODO: Lighting class 
@@ -160,7 +158,9 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gAlbedo);
 		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
 		glBindTexture(GL_TEXTURE_2D, m_ssao->ssaoColorBufferBlur);
-		FlatEngine::Draw::render_quad();
+		m_fBuffer->Begin();
+		FlatEngine::Draw::RenderQuad();
+		m_fBuffer->End();
 
 		FlatEngine::UI::DrawEditorUI();
 

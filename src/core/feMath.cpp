@@ -1,4 +1,4 @@
-#include "meth.h"
+#include "feMath.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 namespace FlatEngine::Math {
