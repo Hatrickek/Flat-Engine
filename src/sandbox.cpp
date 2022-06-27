@@ -25,10 +25,12 @@
 
 #include "core/renderer.h"
 #include "core/ui/panels/viewportPanel.h"
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+//**TODO: Move to input handling 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void ProcessInput(GLFWwindow* window);
+//**
 
 // camera
 FlatEngine::Camera camera;
@@ -37,15 +39,15 @@ float lastY = (float)FlatEngine::Window::SCR_HEIGHT / 2.0;
 bool firstMouse = true;
 
 std::shared_ptr<FlatEngine::SSAO> m_ssao;
-std::shared_ptr<FlatEngine::GBuffer> m_gBuffer;
 int main() {
 	// glfw: initialize and configure
 	FlatEngine::Core::Init();
-	glfwSetFramebufferSizeCallback(FlatEngine::Window::GetOpenGLWindow(), framebuffer_size_callback);
+
+	//**TODO: Move to input handling
 	glfwSetCursorPosCallback(FlatEngine::Window::GetOpenGLWindow(), mouse_callback);
 	glfwSetScrollCallback(FlatEngine::Window::GetOpenGLWindow(), scroll_callback);
-	
-	// configure global opengl state
+	//**
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 
@@ -57,11 +59,11 @@ int main() {
 	FlatEngine::Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
 	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
 
-	m_gBuffer = std::make_shared<FlatEngine::GBuffer>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
-
-	m_ssao = std::make_shared<FlatEngine::SSAO>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
+	FlatEngine::Renderer::CreateGBuffer();
+	
+	m_ssao = FlatEngine::CreateRef<FlatEngine::SSAO>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
 	m_ssao->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
-	//m_ssao = &ssao;
+
 	// lighting info
 	lightPositions.emplace_back(glm::vec3(2.0, 1.0, -2.0));
 	lightColors.emplace_back(glm::vec3(0.2, 0.2, 0.7));
@@ -91,8 +93,9 @@ int main() {
 		// render
 		// ------
 		FlatEngine::Renderer::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		FlatEngine::Renderer::Clear();
 
-		m_gBuffer->Begin();
+		FlatEngine::Renderer::GetGbuffer()->Begin();
 
 		glm::mat4 projection = camera.GetProjectionMatrix();
 		glm::mat4 view = camera.GetViewMatrix();
@@ -115,9 +118,9 @@ int main() {
 			shader_ssao_geometry_pass.setMat4("model", model);
 			FlatEngine::Draw::DrawCube(shader_ssao_geometry_pass, glm::vec4(lightColors[i], 1), lightPositions[i], glm::vec3(.1,.1,.1));
 		}
-		m_gBuffer->End();
+		FlatEngine::Renderer::GetGbuffer()->End();
 		
-		m_ssao->BeginSSAOTexture(projection, m_gBuffer->gPosition, m_gBuffer->gNormal);
+		m_ssao->BeginSSAOTexture(projection, FlatEngine::Renderer::GetGbuffer()->gPosition, FlatEngine::Renderer::GetGbuffer()->gNormal);
 		FlatEngine::Draw::RenderQuad();
 		m_ssao->EndSSAOTexture();
 
@@ -139,11 +142,11 @@ int main() {
 		shader_lighting_pass.setFloat("light.Linear", linear);
 		shader_lighting_pass.setFloat("light.Quadratic", quadratic);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gPosition);
+		glBindTexture(GL_TEXTURE_2D, FlatEngine::Renderer::GetGbuffer()->gPosition);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gNormal);
+		glBindTexture(GL_TEXTURE_2D, FlatEngine::Renderer::GetGbuffer()->gNormal);
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gAlbedo);
+		glBindTexture(GL_TEXTURE_2D, FlatEngine::Renderer::GetGbuffer()->gAlbedo);
 		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
 		glBindTexture(GL_TEXTURE_2D, m_ssao->ssaoColorBufferBlur);
 		FlatEngine::Renderer::BeginRendering();
@@ -185,16 +188,6 @@ void ProcessInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(FlatEngine::LEFT, FlatEngine::Timestep::GetDeltaTime());
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::D))
 		camera.ProcessKeyboard(FlatEngine::RIGHT, FlatEngine::Timestep::GetDeltaTime());
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	m_gBuffer->RegenerateBuffers(width, height);
-	m_ssao->RegenerateBuffers(width, height);
-	FlatEngine::Window::SCR_HEIGHT = height;
-	FlatEngine::Window::SCR_WIDTH = width;
-
-	glViewport(0, 0, width, height);
 }
 
 // glfw: whenever the mouse moves, this callback is called

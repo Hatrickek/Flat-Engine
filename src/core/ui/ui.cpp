@@ -219,6 +219,7 @@ namespace FlatEngine {
 	}
 
 	void UI::ShowImguiDockSpace() {
+		ImGui::ShowDemoWindow();
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
@@ -365,10 +366,15 @@ namespace FlatEngine {
 		ImGuiStyle* style = &ImGui::GetStyle();
 	    ImVec4* colors = style->Colors;
 		style->WindowBorderSize = 0;
-		style->WindowRounding = 3.0f;
-		style->FrameRounding = 3.0f;
+		style->WindowRounding = 1.0f;
+		style->FrameRounding = 1.0f;
 	    colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-		colors[ImGuiCol_Header]					= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_Tab]					= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabActive]				= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabUnfocused]			= ImVec4(0.7f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabUnfocusedActive]		= ImVec4(0.7f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabHovered]				= ImVec4(0.5f, 0.180f, 0.000f, 1.000f);
+		colors[ImGuiCol_Header]					= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_WindowBg]				= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_PopupBg]				= ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 		colors[ImGuiCol_Border]					= ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
@@ -385,7 +391,7 @@ namespace FlatEngine {
 		colors[ImGuiCol_ScrollbarGrabHovered]	= ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 		colors[ImGuiCol_ScrollbarGrabActive]	= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_CheckMark]				= ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-		colors[ImGuiCol_SliderGrab]				= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+		colors[ImGuiCol_SliderGrab]				= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_SliderGrabActive]		= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_Button]					= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_ButtonHovered]			= ImVec4(1.000f, 0.114f, 0.114f, 1.000f);
