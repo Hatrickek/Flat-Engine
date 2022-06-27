@@ -219,7 +219,6 @@ namespace FlatEngine {
 	}
 
 	void UI::ShowImguiDockSpace() {
-		ImGui::ShowDemoWindow();
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |

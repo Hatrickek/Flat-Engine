@@ -7,7 +7,7 @@ namespace FlatEngine {
 		static void Init() {
 		}
 		static void Update() {
-			
+			glfwPollEvents();
 			Timestep::UpdateTime();
 		}
 	};

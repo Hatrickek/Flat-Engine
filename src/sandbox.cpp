@@ -38,7 +38,6 @@ float lastX = (float)FlatEngine::Window::SCR_WIDTH / 2.0;
 float lastY = (float)FlatEngine::Window::SCR_HEIGHT / 2.0;
 bool firstMouse = true;
 
-std::shared_ptr<FlatEngine::SSAO> m_ssao;
 int main() {
 	// glfw: initialize and configure
 	FlatEngine::Core::Init();
@@ -47,10 +46,7 @@ int main() {
 	glfwSetCursorPosCallback(FlatEngine::Window::GetOpenGLWindow(), mouse_callback);
 	glfwSetScrollCallback(FlatEngine::Window::GetOpenGLWindow(), scroll_callback);
 	//**
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-
+	 
 	FlatEngine::Editor::OnInit();
 
 	// build and compile shaders
@@ -59,10 +55,7 @@ int main() {
 	FlatEngine::Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
 	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
 
-	FlatEngine::Renderer::CreateGBuffer();
-	
-	m_ssao = FlatEngine::CreateRef<FlatEngine::SSAO>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
-	m_ssao->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
+	FlatEngine::Renderer::GetSSAOBuffer()->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
 
 	// lighting info
 	lightPositions.emplace_back(glm::vec3(2.0, 1.0, -2.0));
@@ -81,7 +74,6 @@ int main() {
 	camera.SetPosition(glm::vec3(1,1,3));
 
 	while (!glfwWindowShouldClose(FlatEngine::Window::GetOpenGLWindow())) {
-		glfwPollEvents();
 		FlatEngine::App::Update();
 
 		// input
@@ -120,14 +112,14 @@ int main() {
 		}
 		FlatEngine::Renderer::GetGbuffer()->End();
 		
-		m_ssao->BeginSSAOTexture(projection, FlatEngine::Renderer::GetGbuffer()->gPosition, FlatEngine::Renderer::GetGbuffer()->gNormal);
+		FlatEngine::Renderer::GetSSAOBuffer()->BeginSSAOTexture(projection, FlatEngine::Renderer::GetGbuffer()->gPosition, FlatEngine::Renderer::GetGbuffer()->gNormal);
 		FlatEngine::Draw::RenderQuad();
-		m_ssao->EndSSAOTexture();
+		FlatEngine::Renderer::GetSSAOBuffer()->EndSSAOTexture();
 
 		// 3. blur SSAO texture to remove noise
-		m_ssao->BeginSSAOBlurTexture();
+		FlatEngine::Renderer::GetSSAOBuffer()->BeginSSAOBlurTexture();
 		FlatEngine::Draw::RenderQuad();
-		m_ssao->EndSSAOBlurTexture();
+		FlatEngine::Renderer::GetSSAOBuffer()->EndSSAOBlurTexture();
 
 		//TODO: Lighting class 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -148,7 +140,7 @@ int main() {
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, FlatEngine::Renderer::GetGbuffer()->gAlbedo);
 		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
-		glBindTexture(GL_TEXTURE_2D, m_ssao->ssaoColorBufferBlur);
+		glBindTexture(GL_TEXTURE_2D, FlatEngine::Renderer::GetSSAOBuffer()->ssaoColorBufferBlur);
 		FlatEngine::Renderer::BeginRendering();
 		FlatEngine::Draw::RenderQuad();
 		FlatEngine::Renderer::EndRendering();
