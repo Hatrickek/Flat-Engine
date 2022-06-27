@@ -2,14 +2,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "core/core.h"
+
 #include "core/filesystem.h"
 #include "core/shader.h"
 #include "core/camera.h"
-#include "core/model.h"
-
-#include <iostream>
-#include <random>
-
 #include "core/draw.h"
 #include "core/ui/ui.h"
 #include "core/input.h"
@@ -26,7 +23,8 @@
 #include "core/scene.h"
 #include "sandbox.h"
 
-#include "core/framebuffer.h"
+#include "core/renderer.h"
+#include "core/ui/panels/viewportPanel.h"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -40,20 +38,18 @@ bool firstMouse = true;
 
 std::shared_ptr<FlatEngine::SSAO> m_ssao;
 std::shared_ptr<FlatEngine::GBuffer> m_gBuffer;
-std::shared_ptr<FlatEngine::FBuffer> m_fBuffer;
 int main() {
 	// glfw: initialize and configure
-	FlatEngine::Log::Init();
-	FlatEngine::Window::InitOpenGLWindow();
+	FlatEngine::Core::Init();
 	glfwSetFramebufferSizeCallback(FlatEngine::Window::GetOpenGLWindow(), framebuffer_size_callback);
 	glfwSetCursorPosCallback(FlatEngine::Window::GetOpenGLWindow(), mouse_callback);
 	glfwSetScrollCallback(FlatEngine::Window::GetOpenGLWindow(), scroll_callback);
 	
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);  
+	glEnable(GL_MULTISAMPLE);
+
 	FlatEngine::Editor::OnInit();
-	FlatEngine::UI::InitUI(FlatEngine::Window::GetOpenGLWindow());
 
 	// build and compile shaders
 	FlatEngine::Shader shader_ssao_geometry_pass("resources/shaders/ssao_geometry.vs", "resources/shaders/ssao_geometry.fs");
@@ -62,7 +58,6 @@ int main() {
 	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
 
 	m_gBuffer = std::make_shared<FlatEngine::GBuffer>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
-	m_fBuffer = std::make_shared<FlatEngine::FBuffer>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
 
 	m_ssao = std::make_shared<FlatEngine::SSAO>(FlatEngine::Window::SCR_WIDTH, FlatEngine::Window::SCR_HEIGHT);
 	m_ssao->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
@@ -85,7 +80,6 @@ int main() {
 
 	while (!glfwWindowShouldClose(FlatEngine::Window::GetOpenGLWindow())) {
 		glfwPollEvents();
-
 		FlatEngine::App::Update();
 
 		// input
@@ -96,14 +90,9 @@ int main() {
 		FlatEngine::UI::UpdateImgui();
 		// render
 		// ------
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		FlatEngine::Renderer::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		// 1. geometry pass: render scene's geometry/color data into gbuffer
-		// -----------------------------------------------------------------
-		
 		m_gBuffer->Begin();
-		
 
 		glm::mat4 projection = camera.GetProjectionMatrix();
 		glm::mat4 view = camera.GetViewMatrix();
@@ -138,7 +127,6 @@ int main() {
 		m_ssao->EndSSAOBlurTexture();
 
 		//TODO: Lighting class 
-		// 4. lighting pass: traditional deferred Blinn-Phong lighting with added screen-space ambient occlusion
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader_lighting_pass.use();
 		// send light relevant uniforms
@@ -158,9 +146,9 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, m_gBuffer->gAlbedo);
 		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
 		glBindTexture(GL_TEXTURE_2D, m_ssao->ssaoColorBufferBlur);
-		m_fBuffer->Begin();
+		FlatEngine::Renderer::BeginRendering();
 		FlatEngine::Draw::RenderQuad();
-		m_fBuffer->End();
+		FlatEngine::Renderer::EndRendering();
 
 		FlatEngine::UI::DrawEditorUI();
 
@@ -169,7 +157,6 @@ int main() {
 
 		glfwSwapBuffers(FlatEngine::Window::GetOpenGLWindow());
 	}
-
 	FlatEngine::UI::EndImgui();
 
 	glfwTerminate();

@@ -7,6 +7,7 @@ namespace FlatEngine {
 		static void Init() {
 		}
 		static void Update() {
+			
 			Timestep::UpdateTime();
 		}
 	};

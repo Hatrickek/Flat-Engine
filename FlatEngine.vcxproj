@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\renderer.cpp" />
     <ClCompile Include="src\core\sceneSerializer.cpp" />
     <ClCompile Include="src\core\ui\panels\sceneHPanel.cpp" />
     <ClCompile Include="src\core\core.cpp" />
@@ -57,6 +58,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\a\includes\GLFW\glfw3.h" />
     <ClInclude Include="src\core\framebuffer.h" />
+    <ClInclude Include="src\core\renderer.h" />
     <ClInclude Include="src\core\sceneSerializer.h" />
     <ClInclude Include="src\core\ui\panels\sceneHPanel.h" />
     <ClInclude Include="src\core\animation.h" />

@@ -92,7 +92,7 @@ namespace FlatEngine {
 		ShowImguiDockSpace();
 		ViewportPanel::DrawViewport();
 		DrawGizmos();
-		if (GetEngineState() == EDITING) {
+		if (Core::GetEngineState() == Core::EDITING) {
 			DrawDebugPanel();
 			SceneHPanel::DrawPanel();
 			DrawConsoleWindow();
@@ -105,12 +105,9 @@ namespace FlatEngine {
 		Entity selectedEntity = SceneHPanel::GetSelectedEntity();
 		if (!selectedEntity && m_GizmoType == -1) return;
 		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::Enable(true);
-		//ImGuizmo::SetDrawlist();
-		ImGuiIO& io = ImGui::GetIO();
-		ImGuizmo::SetRect(0, 0, Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		ImGuizmo::SetRect(ViewportPanel::m_ViewportBounds[0].x, ViewportPanel::m_ViewportBounds[0].y, ViewportPanel::m_ViewportBounds[1].x - ViewportPanel::m_ViewportBounds[0].x, ViewportPanel::m_ViewportBounds[1].y - ViewportPanel::m_ViewportBounds[0].y);
 
-		const glm::mat4& cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
+		glm::mat4 cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
 		glm::mat4 cameraView = Editor::GetEditorCamera()->GetViewMatrix();
 		// Entity transform
 		glm::mat4 transform;
@@ -291,22 +288,24 @@ namespace FlatEngine {
 				ImGui::EndMenuBar();
 			}
 		}
+		ImGui::End();
 		if (ImGui::BeginViewportSideBar("##SecondMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
 			if (ImGui::BeginMenuBar()) {
 				ImGui::SetCursorPos(ImVec2(Window::SCR_WIDTH / 2, 0));
 				if (ImGui::MenuItem(">>")) {
-					SetEngineState(PLAYING);
+					Core::SetEngineState(Core::PLAYING);
 					Input::SetCursorState(Input::CURSOR_STATE_DISABLED, Window::GetOpenGLWindow());
 					ImGui::EndMenu();
 				}
 				if (ImGui::MenuItem("||")) {
-					SetEngineState(EDITING);
+					Core::SetEngineState(Core::EDITING);
 					Input::SetCursorState(Input::CURSOR_STATE_NORMAL, Window::GetOpenGLWindow());
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenuBar();
 			}
 		}
+		ImGui::End();
 		ImGui::End();
 	}
 	void UI::SettingsMenu() {

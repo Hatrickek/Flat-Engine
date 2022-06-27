@@ -14,7 +14,6 @@ namespace FlatEngine {
 		if (!scenehierarchy_window) return;
 
 		ImGui::Begin("Scene Hierarchy");
-
 		m_Scene->m_Registry.each([&](auto entityID)
 		{
 			Entity entity{entityID, m_Scene.get()};
