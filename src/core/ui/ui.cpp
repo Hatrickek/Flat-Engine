@@ -3,7 +3,6 @@
 #include "imgui_internal.h"
 #include "ImGuizmo/ImGuizmo.h"
 
-#include <cstdio>
 #include <ShObjIdl.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -17,11 +16,10 @@
 #include "core/utility.h"
 #include "core/window.h"
 #include "panels/sceneHPanel.h"
-#include "meth.h"
+#include "panels/viewportPanel.h"
+#include "core/feMath.h"
 #include "uiutils.h"
 #include "core/sceneSerializer.h"
-//---------------------------------------------------
-//Imgui Functions
 namespace FlatEngine {
 	void UI::InitUI(GLFWwindow* window) {
 		// Setup Dear ImGui context
@@ -92,32 +90,14 @@ namespace FlatEngine {
 	static bool settingsMenuOn = false;
 	void UI::DrawEditorUI() {
 		ShowImguiDockSpace();
+		ViewportPanel::DrawViewport();
 		DrawGizmos();
-		//DrawViewport();
-		DrawImguiPerformanceOverlay();
-		if (GetEngineState() == EDITING) {
+		if (Core::GetEngineState() == Core::EDITING) {
 			DrawDebugPanel();
 			SceneHPanel::DrawPanel();
 			DrawConsoleWindow();
 			SettingsMenu();
 		}
-	}
-	static glm::vec2 m_ViewportBounds[2];
-	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-	void UI::DrawViewport() {
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
-		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
-		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-		auto viewportOffset = ImGui::GetWindowPos();
-		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-		//uint64_t textureID = m_gBuffer->id;
-		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
-		ImGui::PopStyleVar();
 	}
 
 	void UI::DrawGizmos() {
@@ -125,12 +105,9 @@ namespace FlatEngine {
 		Entity selectedEntity = SceneHPanel::GetSelectedEntity();
 		if (!selectedEntity && m_GizmoType == -1) return;
 		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::Enable(true);
-		//ImGuizmo::SetDrawlist();
-		ImGuiIO& io = ImGui::GetIO();
-		ImGuizmo::SetRect(0, 0, Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		ImGuizmo::SetRect(ViewportPanel::m_ViewportBounds[0].x, ViewportPanel::m_ViewportBounds[0].y, ViewportPanel::m_ViewportBounds[1].x - ViewportPanel::m_ViewportBounds[0].x, ViewportPanel::m_ViewportBounds[1].y - ViewportPanel::m_ViewportBounds[0].y);
 
-		const glm::mat4& cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
+		glm::mat4 cameraProjection = Editor::GetEditorCamera()->GetProjectionMatrix();
 		glm::mat4 cameraView = Editor::GetEditorCamera()->GetViewMatrix();
 		// Entity transform
 		glm::mat4 transform;
@@ -241,47 +218,8 @@ namespace FlatEngine {
 		ImGui::End();
 	}
 
-	void UI::DrawImguiPerformanceOverlay() {
-		if (!performance_overlay) return;
-		static int corner = 2;
-		ImGuiIO& io = ImGui::GetIO();
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking |
-			ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-			ImGuiWindowFlags_NoNav;
-		if (corner != -1) {
-			const float PAD_X = 20;
-			const float PAD_Y = 40;
-			const ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
-			ImVec2 work_size = viewport->WorkSize;
-			ImVec2 window_pos, window_pos_pivot;
-			window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD_X) : (work_pos.x + PAD_X);
-			window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD_Y) : (work_pos.y + PAD_Y);
-			window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
-			window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
-			ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			window_flags |= ImGuiWindowFlags_NoMove;
-		}
-		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-		if (ImGui::Begin("Performance Overlay", NULL, window_flags)) {
-			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		}
-		if (ImGui::BeginPopupContextWindow()) {
-			if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
-			if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
-			if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
-			if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
-			if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
-			if (performance_overlay && ImGui::MenuItem("Close")) performance_overlay = false;
-			ImGui::EndPopup();
-		}
-		ImGui::End();
-	}
-
 	void UI::ShowImguiDockSpace() {
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode |
-			ImGuiDockNodeFlags_NoDockingInCentralNode;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
 			ImGuiWindowFlags_NoBackground;
@@ -350,22 +288,24 @@ namespace FlatEngine {
 				ImGui::EndMenuBar();
 			}
 		}
+		ImGui::End();
 		if (ImGui::BeginViewportSideBar("##SecondMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
 			if (ImGui::BeginMenuBar()) {
 				ImGui::SetCursorPos(ImVec2(Window::SCR_WIDTH / 2, 0));
 				if (ImGui::MenuItem(">>")) {
-					SetEngineState(PLAYING);
+					Core::SetEngineState(Core::PLAYING);
 					Input::SetCursorState(Input::CURSOR_STATE_DISABLED, Window::GetOpenGLWindow());
 					ImGui::EndMenu();
 				}
 				if (ImGui::MenuItem("||")) {
-					SetEngineState(EDITING);
+					Core::SetEngineState(Core::EDITING);
 					Input::SetCursorState(Input::CURSOR_STATE_NORMAL, Window::GetOpenGLWindow());
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenuBar();
 			}
 		}
+		ImGui::End();
 		ImGui::End();
 	}
 	void UI::SettingsMenu() {
@@ -425,10 +365,15 @@ namespace FlatEngine {
 		ImGuiStyle* style = &ImGui::GetStyle();
 	    ImVec4* colors = style->Colors;
 		style->WindowBorderSize = 0;
-		style->WindowRounding = 3.0f;
-		style->FrameRounding = 3.0f;
+		style->WindowRounding = 1.0f;
+		style->FrameRounding = 1.0f;
 	    colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
-		colors[ImGuiCol_Header]					= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_Tab]					= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabActive]				= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabUnfocused]			= ImVec4(0.7f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabUnfocusedActive]		= ImVec4(0.7f, 0.180f, 0.000f, 1.000f);
+	    colors[ImGuiCol_TabHovered]				= ImVec4(0.5f, 0.180f, 0.000f, 1.000f);
+		colors[ImGuiCol_Header]					= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_WindowBg]				= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_PopupBg]				= ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 		colors[ImGuiCol_Border]					= ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
@@ -445,7 +390,7 @@ namespace FlatEngine {
 		colors[ImGuiCol_ScrollbarGrabHovered]	= ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 		colors[ImGuiCol_ScrollbarGrabActive]	= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_CheckMark]				= ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-		colors[ImGuiCol_SliderGrab]				= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
+		colors[ImGuiCol_SliderGrab]				= ImVec4(0.8f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_SliderGrabActive]		= ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 		colors[ImGuiCol_Button]					= ImVec4(0.824f, 0.180f, 0.000f, 1.000f);
 		colors[ImGuiCol_ButtonHovered]			= ImVec4(1.000f, 0.114f, 0.114f, 1.000f);

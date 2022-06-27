@@ -41,7 +41,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\sandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\glad.c">
@@ -116,7 +116,7 @@
     <ClCompile Include="src\core\resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\meth.cpp">
+    <ClCompile Include="src\core\feMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGuizmo\ImCurveEdit.cpp">
@@ -138,6 +138,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\sceneSerializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ui\panels\viewportPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -337,7 +343,7 @@
     <ClInclude Include="src\core\resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\meth.h">
+    <ClInclude Include="src\core\feMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGuizmo\ImCurveEdit.h">
@@ -420,6 +426,18 @@
     </ClInclude>
     <ClInclude Include="vendor\yaml-cpp\yaml.h">
       <Filter>vendor\yaml</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sandbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\framebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ui\panels\viewportPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\renderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

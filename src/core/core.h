@@ -1,12 +1,15 @@
 #pragma once
 
 namespace FlatEngine {
-	enum EngineState {
-		EDITING,
-		PLAYING,
-		PAUSED,
+	class Core {
+	public:
+		enum EngineState {
+			EDITING,
+			PLAYING,
+			PAUSED,
+		};
+		static void Init();
+		static void SetEngineState(EngineState state);
+		static EngineState GetEngineState();
 	};
-
-	void SetEngineState(EngineState state);
-	EngineState GetEngineState();
 }

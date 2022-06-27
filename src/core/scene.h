@@ -20,7 +20,7 @@ namespace FlatEngine{
 		void OnComponentAdded(Entity entity, T& component);
 
 		friend class Entity;
-		//friend class SceneSerializer;
-		//friend class SceneHierarchyPanel;
+		friend class SceneSerializer;
+		friend class SceneHierarchyPanel;
 	};	
 }

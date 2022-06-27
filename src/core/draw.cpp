@@ -37,14 +37,14 @@ namespace FlatEngine {
 		m_model = glm::scale(m_model, scale);
 		shader.setVec4("color", color);
 		shader.setMat4("model", m_model);
-		render_cube();
+		RenderCube();
 		shader.setVec4("color", BLANK);
 		return m_model;
 	}
 
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;
-	void Draw::render_cube() {
+	void Draw::RenderCube() {
 		if (cubeVAO == 0) {
 			float vertices[] = {
 				// back face
@@ -112,8 +112,8 @@ namespace FlatEngine {
 		glBindVertexArray(0);
 	}
 	unsigned int quadVAO = 0;
-	unsigned int quadVBO;
-	void Draw::render_quad() {
+	static unsigned int quadVBO;
+	void Draw::RenderQuad() {
 		if (quadVAO == 0) {
 			float quadVertices[] = {
 				// positions        // texture Coords

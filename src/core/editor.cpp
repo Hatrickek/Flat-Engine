@@ -8,6 +8,8 @@
 #include "input.h"
 #include "window.h"
 #include "resources.h"
+#include "ui/ui.h"
+
 namespace FlatEngine {
 	Ref<Scene> Editor::m_ActiveScene;
 	Ref<Camera> Editor::m_EditorCamera;
@@ -32,7 +34,12 @@ namespace FlatEngine {
 		patrick.GetComponent<TransformComponent>().Translation = glm::vec3(2.5f, -0.5f, -3.0);
 		patrick.GetComponent<TransformComponent>().Rotation = glm::vec3(0,90,0);
 		patrick.AddComponent<MeshRendererComponent>(CreateRef<Model>(patrick_model), Resources::GetDefaultShader(), BLANK);
+
+		UI::InitUI(Window::GetOpenGLWindow());
 	}
+	//void Editor::DrawUI() {
+	//	
+	//}
 	void Editor::OnUpdate() {
 		m_ActiveScene->OnUpdate(Timestep::GetDeltaTime());
 	}

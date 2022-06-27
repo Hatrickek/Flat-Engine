@@ -12,11 +12,8 @@ namespace FlatEngine{
 		static void EndImgui();
 
 		//Custom windows
-		static void DrawViewport();
 		static void DrawEditorUI();
-		static void DrawImguiPerformanceOverlay();
 		static void ShowImguiDockSpace();
-		static void DrawSceneHierarchy();
 		static void DrawConsoleWindow();
 		static void DrawDebugPanel();
 		static void DrawGizmos();
