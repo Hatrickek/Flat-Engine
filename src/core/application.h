@@ -1,6 +1,6 @@
 #pragma once
-#include "timestep.h"
-#include "log.h"
+#include "utils/timestep.h"
+#include "utils/log.h"
 namespace FlatEngine {
 	class App {
 	public:

@@ -2,15 +2,15 @@
 #include <ostream>
 #include "glad/glad.h"
 
-#include "log.h"
+#include "utils/log.h"
 
 namespace FlatEngine {
 	class GBuffer {
 	public:
 		unsigned int gbufferID;
 		unsigned int gPosition, gNormal, gAlbedo, rboDepth;
-		GBuffer(unsigned int width, unsigned int height) {
-			m_width  = width;
+		GBuffer(unsigned int width, unsigned int height){
+			m_width = width;
 			m_height = height;
 
 			//position buffer
@@ -49,13 +49,15 @@ namespace FlatEngine {
 			glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-			// finally check if framebuffer is complete
+
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-				FE_LOG_ERROR("Framebuffer not complete!" );
-			else
-				FE_LOG_INFO("Framebuffer created! ID: {0}", gbufferID);
+				FE_LOG_ERROR("Framebuffer not complete!");
+			//else
+			//	FE_LOG_INFO("Framebuffer created! ID: {0}", gbufferID);
+
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
+
 		void RegenerateBuffers(unsigned int width, unsigned int height) {
 			Unload();
 			GBuffer(width, height);
@@ -69,9 +71,9 @@ namespace FlatEngine {
 		}
 		void Unload() {
 			glDeleteFramebuffers(1, &gbufferID);
-		    glDeleteTextures(1, &gAlbedo);
-		    glDeleteTextures(1, &gNormal);
-		    glDeleteTextures(1, &gPosition);
+			glDeleteTextures(1, &gAlbedo);
+			glDeleteTextures(1, &gNormal);
+			glDeleteTextures(1, &gPosition);
 			glDeleteBuffers(1, &rboDepth);
 		}
 	private:

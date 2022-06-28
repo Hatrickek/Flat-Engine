@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 
 #include "shader.h"
-#include "components.h"
+#include "core/components.h"
 namespace FlatEngine {
 	class Draw {
 	public:

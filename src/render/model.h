@@ -7,9 +7,9 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include <core/mesh.h>
-#include <core/shader.h>
-#include <core/animdata.h>
+#include <render/mesh.h>
+#include <render/shader.h>
+#include <render/animation/animdata.h>
 
 #include <string>
 #include <iostream>
@@ -17,8 +17,9 @@
 #include <vector>
 #include <format>
 
+//#include "assimp_glm_helpers.h"
 #include "assimp_glm_helpers.h"
-#include "log.h"
+#include "utils/log.h"
 namespace FlatEngine {
 	class Model {
 	public:

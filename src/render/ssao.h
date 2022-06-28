@@ -2,7 +2,7 @@
 #include "shader.h"
 #include "GLFW/glfw3.h"
 #include <random>
-#include "log.h"
+#include "utils/log.h"
 namespace FlatEngine {
 	class SSAO {
 	public:

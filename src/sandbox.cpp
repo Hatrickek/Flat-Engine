@@ -4,27 +4,26 @@
 
 #include "core/core.h"
 
-#include "core/filesystem.h"
-#include "core/shader.h"
+#include "utils/filesystem.h"
+#include "render/shader.h"
 #include "core/camera.h"
-#include "core/draw.h"
-#include "core/ui/ui.h"
+#include "render/draw.h"
+#include "ui/ui.h"
 #include "core/input.h"
-#include "core/animation.h"
-#include "core/animator.h"
-#include "core/window.h"
-#include "core/log.h"
+//#include "render/animation/animation.h"
+//#include "render/animation/animator.h"
+#include "render/window.h"
+#include "utils/log.h"
 
-#include "core/ssao.h"
+#include "render/ssao.h"
 #include "level.h"
 #include "core/application.h"
 #include "core/editor.h"
-#include "core/gbuffer.h"
+#include "render/gbuffer.h"
 #include "core/scene.h"
-#include "sandbox.h"
 
-#include "core/renderer.h"
-#include "core/ui/panels/viewportPanel.h"
+#include "render/renderer.h"
+#include "ui/panels/viewportPanel.h"
 
 //**TODO: Move to input handling 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -50,10 +49,10 @@ int main() {
 	FlatEngine::Editor::OnInit();
 
 	// build and compile shaders
-	FlatEngine::Shader shader_ssao_geometry_pass("resources/shaders/ssao_geometry.vs", "resources/shaders/ssao_geometry.fs");
-	FlatEngine::Shader shader_lighting_pass("resources/shaders/ssao.vs", "resources/shaders/ssao_lighting.fs");
-	FlatEngine::Shader shader_ssao("resources/shaders/ssao.vs", "resources/shaders/ssao.fs");
-	FlatEngine::Shader shader_ssao_blur("resources/shaders/ssao.vs", "resources/shaders/ssao_blur.fs");
+	FlatEngine::Shader shader_ssao_geometry_pass(FileSystem::getPath("resources/shaders/ssao_geometry.vs").c_str(), FileSystem::getPath("resources/shaders/ssao_geometry.fs").c_str());
+	FlatEngine::Shader shader_lighting_pass(FileSystem::getPath("resources/shaders/ssao.vs").c_str(), FileSystem::getPath("resources/shaders/ssao_lighting.fs").c_str());
+	FlatEngine::Shader shader_ssao(FileSystem::getPath("resources/shaders/ssao.vs").c_str(), FileSystem::getPath("resources/shaders/ssao.fs").c_str());
+	FlatEngine::Shader shader_ssao_blur(FileSystem::getPath("resources/shaders/ssao.vs").c_str(), FileSystem::getPath("resources/shaders/ssao_blur.fs").c_str());
 
 	FlatEngine::Renderer::GetSSAOBuffer()->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
 

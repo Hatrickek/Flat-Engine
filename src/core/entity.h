@@ -1,6 +1,6 @@
 #pragma once
 #include "input.h"
-#include "log.h"
+#include "utils/log.h"
 #include "entt/entt.hpp"
 
 #include "scene.h"

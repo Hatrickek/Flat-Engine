@@ -12,14 +12,15 @@
 #include "level.h" //TODO: this is temporary import for accesing the lighting properties.
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "core/ssao.h"
-#include "core/utility.h"
-#include "core/window.h"
+#include "render/ssao.h"
+#include "utils/utility.h"
+#include "render/window.h"
 #include "panels/sceneHPanel.h"
 #include "panels/viewportPanel.h"
-#include "core/feMath.h"
+#include "utils/feMath.h"
 #include "uiutils.h"
 #include "core/sceneSerializer.h"
+#include "utils/filesystem.h"
 namespace FlatEngine {
 	void UI::InitUI(GLFWwindow* window) {
 		// Setup Dear ImGui context
@@ -43,7 +44,7 @@ namespace FlatEngine {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		io.Fonts->AddFontFromFileTTF("resources/fonts/Roboto-Medium.ttf", 16.0f);
+		io.Fonts->AddFontFromFileTTF(FileSystem::getPath("resources/fonts/Roboto-Medium.ttf").c_str(), 16.0f);
 		io.Fonts->AddFontDefault();
 		io.Fonts->Build();
 

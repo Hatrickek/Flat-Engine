@@ -8,8 +8,7 @@ namespace FlatEngine {
 		SSAO::SSAO(unsigned int m_width, unsigned int m_height) {
 			width  = m_width;
 			height = m_height;
-
-			//// also create framebuffer to hold SSAO processing stage 
+			
 			glGenFramebuffers(1, &ssaoFBO);
 			glGenFramebuffers(1, &ssaoBlurFBO);
 			glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);

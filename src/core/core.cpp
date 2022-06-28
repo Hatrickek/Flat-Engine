@@ -1,9 +1,9 @@
 #include "core.h"
 #include <core/input.h>
 
-#include "log.h"
-#include "renderer.h"
-#include "window.h"
+#include "utils/log.h"
+#include "render/renderer.h"
+#include "render/window.h"
 
 namespace FlatEngine {
 	Core::EngineState engine_state;

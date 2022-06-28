@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "input.h"
+#include "core/input.h"
 namespace FlatEngine {
 	class Window {
 	public:

@@ -2,16 +2,17 @@
 #include <ostream>
 #include "glad/glad.h"
 
-#include "log.h"
+#include "utils/log.h"
 
 namespace FlatEngine {
 	class FBuffer {
 	public:
 		unsigned int fBufferID;
 		unsigned int colorBuffer;
-
-		FBuffer(unsigned int width, unsigned int height) {
-			m_width  = width;
+		unsigned int m_width;
+		unsigned int m_height;
+		FBuffer(unsigned int width, unsigned int height){
+			m_width = width;
 			m_height = height;
 
 			glGenFramebuffers(1, &fBufferID);
@@ -28,15 +29,16 @@ namespace FlatEngine {
 			glDrawBuffers(3, &attachments);
 
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-				FE_LOG_ERROR("Framebuffer not complete!" );
-			else
-				FE_LOG_INFO("Framebuffer created! ID: {0}", fBufferID);
+				FE_LOG_ERROR("Framebuffer not complete!");
+			//else
+			//	FE_LOG_INFO("Framebuffer created! ID: {0}", fBufferID);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
+
 		void RegenerateBuffers(unsigned int width, unsigned int height) {
 			Unload();
-			FBuffer(width, height);
+			FBuffer(width ,height);
 		}
 		void Begin(){
 			glBindFramebuffer(GL_FRAMEBUFFER, fBufferID);
@@ -50,8 +52,6 @@ namespace FlatEngine {
 		    glDeleteTextures(1, &colorBuffer);
 		}
 	private:
-		unsigned int m_width;
-		unsigned int m_height;
 	};
 
 }

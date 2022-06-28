@@ -1,8 +1,10 @@
-#ifndef FILESYSTEM_H
-#define FILESYSTEM_H
+#pragma once
+
+#include "rootpath.h"
 
 #include <string>
 #include <cstdlib>
+
 
 class FileSystem
 {
@@ -19,12 +21,11 @@ private:
   static std::string const & getRoot()
   {
     static char const * envRoot = getenv("LOGL_ROOT_PATH");
-    static char const * givenRoot = (envRoot != nullptr ? envRoot : "C:/Users/Halim/Desktop/Projects/FlatEngine");//TODO: Make this work on every machine
+    static char const * givenRoot = (envRoot != nullptr ? envRoot : ROOTPATH);//TODO: Make this work on every machine
     static std::string root = (givenRoot != nullptr ? givenRoot : "");
     return root;
   }
 
-  //static std::string(*foo (std::string const &)) getPathBuilder()
   static Builder getPathBuilder()
   {
     if (getRoot() != "")
@@ -45,6 +46,3 @@ private:
 
 
 };
-
-// FILESYSTEM_H
-#endif

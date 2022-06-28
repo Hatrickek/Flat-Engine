@@ -3,7 +3,7 @@
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
 #include "entity.h"
-#include "model.h"
+#include "render/model.h"
 #include "resources.h"
 
 namespace YAML {

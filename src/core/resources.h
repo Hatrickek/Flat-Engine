@@ -1,6 +1,6 @@
 #pragma once
-#include "model.h"
-#include "utility.h"
+#include "render/model.h"
+#include "utils/utility.h"
 
 namespace FlatEngine {
 	class Resources {

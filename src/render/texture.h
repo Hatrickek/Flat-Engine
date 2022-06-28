@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "log.h"
+#include "utils/log.h"
 #include "stb_image.h"
 #include "glad/glad.h"
 

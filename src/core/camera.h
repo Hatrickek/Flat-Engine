@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "input.h"
-#include "window.h"
+#include "render/window.h"
 
 namespace FlatEngine {
 	enum CameraMovement {

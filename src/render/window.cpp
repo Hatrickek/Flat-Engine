@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "log.h"
+#include "utils/log.h"
 
 namespace FlatEngine {
 	unsigned int Window::SCR_WIDTH = 1600;

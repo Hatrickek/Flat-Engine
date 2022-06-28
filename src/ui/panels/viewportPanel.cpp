@@ -1,12 +1,11 @@
 #include "viewportPanel.h"
 
 #include "imgui.h"
-#include "sandbox.h"
-#include "core/renderer.h"
+#include "render/renderer.h"
 
 namespace FlatEngine {
-	static glm::vec2 m_ViewportSize;
-	glm::vec2 ViewportPanel::m_ViewportBounds[2];
+	static ImVec2 m_ViewportSize;
+	ImVec2 ViewportPanel::m_ViewportBounds[2];
 	ImVec2 ViewportPanel::viewportPanelSize;
 	ImVec2 viewportOffset;
 	void ViewportPanel::DrawViewport() {
@@ -20,7 +19,10 @@ namespace FlatEngine {
 		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
 		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 		viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		if(m_ViewportSize.x != viewportPanelSize.x || m_ViewportSize.y != viewportPanelSize.y) {
+			Renderer::ResizeBuffers();
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		}
 		uint64_t textureID = Renderer::GetFramebuffer()->colorBuffer;
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();

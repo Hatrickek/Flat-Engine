@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>"
-#include "core/window.h"
+#include "render/window.h"
 namespace FlatEngine {
 	std::string FileDialogs::OpenFile(const char* filter) {
 		OPENFILENAMEA ofn;

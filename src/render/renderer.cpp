@@ -6,14 +6,21 @@ namespace FlatEngine {
 	Ref<FBuffer> Renderer::m_fBuffer;
 	Ref<GBuffer> Renderer::m_gBuffer;
 	Ref<SSAO> Renderer::m_SSAOBuffer;
+
 	void Renderer::FrameBufferSizeCallback(GLFWwindow* window, int width, int height) {
-		GetFramebuffer()->RegenerateBuffers(ViewportPanel::viewportPanelSize.x, ViewportPanel::viewportPanelSize.y);
-		m_gBuffer->RegenerateBuffers(ViewportPanel::viewportPanelSize.x, ViewportPanel::viewportPanelSize.y);
-		m_SSAOBuffer->RegenerateBuffers(ViewportPanel::viewportPanelSize.x, ViewportPanel::viewportPanelSize.y);
+		GetFramebuffer()->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+		m_gBuffer->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+		m_SSAOBuffer->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
 		Window::SCR_HEIGHT = height;
 		Window::SCR_WIDTH = width;
 
-		glViewport(0, 0, ViewportPanel::viewportPanelSize.x, ViewportPanel::viewportPanelSize.y);
+		glViewport(0, 0, (int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+	}
+	void Renderer::ResizeBuffers() {
+		GetFramebuffer()->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+		m_gBuffer->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+		m_SSAOBuffer->RegenerateBuffers((int)ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
+		glViewport(0, 0,(int) ViewportPanel::viewportPanelSize.x, (int)ViewportPanel::viewportPanelSize.y);
 	}
 	void Renderer::InitRenderer() {
 		glEnable(GL_DEPTH_TEST);

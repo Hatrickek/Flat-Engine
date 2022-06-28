@@ -7,9 +7,9 @@
 #include <functional>
 #include <core/bone.h>
 #include <core/animdata.h>
-#include <core/model.h>
+#include <render/model.h>
 #include <assimp/Importer.hpp>
-#include "log.h"
+#include "utils/log.h"
 
 namespace FlatEngine {
 	struct AssimpNodeData {

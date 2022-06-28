@@ -1,12 +1,12 @@
 #include "editor.h"
-#include <core/timestep.h>
+#include <utils/timestep.h>
 
 #include "entity.h"
 #include "components.h"
-#include "filesystem.h"
-#include "utility.h"
+#include "utils/filesystem.h"
+#include "utils/utility.h"
 #include "input.h"
-#include "window.h"
+#include "render/window.h"
 #include "resources.h"
 #include "ui/ui.h"
 

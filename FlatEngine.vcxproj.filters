@@ -74,13 +74,13 @@
     <ClCompile Include="src\level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ui\ui.cpp">
+    <ClCompile Include="src\ui\ui.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\input.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\window.cpp">
+    <ClCompile Include="src\render\window.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\core.cpp">
@@ -89,10 +89,10 @@
     <ClCompile Include="src\core\scene.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\log.cpp">
+    <ClCompile Include="src\utils\log.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ssao.cpp">
+    <ClCompile Include="src\render\ssao.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\editor.cpp">
@@ -101,22 +101,22 @@
     <ClCompile Include="src\core\entitity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\model.cpp">
+    <ClCompile Include="src\render\model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\texture.cpp">
+    <ClCompile Include="src\render\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\draw.cpp">
+    <ClCompile Include="src\render\draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ui\panels\sceneHPanel.cpp">
+    <ClCompile Include="src\ui\panels\sceneHPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\feMath.cpp">
+    <ClCompile Include="src\utils\feMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGuizmo\ImCurveEdit.cpp">
@@ -134,16 +134,16 @@
     <ClCompile Include="vendor\ImGuizmo\GraphEditor.cpp">
       <Filter>vendor\imguizmo</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ui\uiutils.cpp">
+    <ClCompile Include="src\ui\uiutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\sceneSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\ui\panels\viewportPanel.cpp">
+    <ClCompile Include="src\ui\panels\viewportPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\renderer.cpp">
+    <ClCompile Include="src\render\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -226,28 +226,22 @@
     <ClInclude Include="vendor\glm\fwd.hpp">
       <Filter>vendor\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\animator.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\camera.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\entity.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\filesystem.h">
+    <ClInclude Include="src\utils\filesystem.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\mesh.h">
+    <ClInclude Include="src\render\mesh.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\model.h">
+    <ClInclude Include="src\render\model.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\shader.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\animation.h">
+    <ClInclude Include="src\render\shader.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui\imgui.h">
@@ -280,13 +274,13 @@
     <ClInclude Include="vendor\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>vendor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ui\ui.h">
+    <ClInclude Include="src\ui\ui.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\draw.h">
+    <ClInclude Include="src\render\draw.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\texture.h">
+    <ClInclude Include="src\render\texture.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="src\level.h">
@@ -298,7 +292,7 @@
     <ClInclude Include="src\core\input.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\window.h">
+    <ClInclude Include="src\render\window.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\core.h">
@@ -310,19 +304,19 @@
     <ClInclude Include="vendor\entt\entt.hpp">
       <Filter>vendor</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\timestep.h">
+    <ClInclude Include="src\utils\timestep.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\log.h">
+    <ClInclude Include="src\utils\log.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\utility.h">
+    <ClInclude Include="src\utils\utility.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\gbuffer.h">
+    <ClInclude Include="src\render\gbuffer.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ssao.h">
+    <ClInclude Include="src\render\ssao.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\editor.h">
@@ -337,13 +331,13 @@
     <ClInclude Include="src\core\FlatEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ui\panels\sceneHPanel.h">
+    <ClInclude Include="src\ui\panels\sceneHPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\feMath.h">
+    <ClInclude Include="src\utils\feMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGuizmo\ImCurveEdit.h">
@@ -364,7 +358,7 @@
     <ClInclude Include="vendor\ImGuizmo\GraphEditor.h">
       <Filter>vendor\imguizmo</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ui\uiutils.h">
+    <ClInclude Include="src\ui\uiutils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\sceneSerializer.h">
@@ -430,13 +424,22 @@
     <ClInclude Include="src\sandbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\framebuffer.h">
+    <ClInclude Include="src\render\framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\ui\panels\viewportPanel.h">
+    <ClInclude Include="src\ui\panels\viewportPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\renderer.h">
+    <ClInclude Include="src\render\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\assimp_glm_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\rootpath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

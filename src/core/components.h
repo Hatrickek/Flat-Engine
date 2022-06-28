@@ -7,15 +7,15 @@
 #include <glm/gtx/quaternion.hpp>
 #include <utility>
 
-#include "model.h"
-#include "utility.h"
+#include "render/model.h"
+#include "utils/utility.h"
 
 namespace FlatEngine {
 	#define WHITE glm::vec4(1,1,1,1)
 	#define BLANK glm::vec4(0,0,0,0)
 	#define RED   glm::vec4(1,0,0,1)
 	#define GREEN glm::vec4(0,1,0,1)
-	#define BLUE  glm::vec4(0,0,1,1
+	#define BLUE  glm::vec4(0,0,1,1)
 
 	enum Primitive {
 		NONE,

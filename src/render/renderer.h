@@ -2,8 +2,8 @@
 #include "framebuffer.h"
 #include "gbuffer.h"
 #include "ssao.h"
-#include "utility.h"
-#include "window.h"
+#include "utils/utility.h"
+#include "render/window.h"
 
 namespace FlatEngine {
 	class Renderer {
@@ -17,6 +17,7 @@ namespace FlatEngine {
 		static void Clear();
 
 		static void CreateGBuffer();
+		static void ResizeBuffers();
 		static void CreateSSAOBuffers();
 		static Ref<FBuffer> GetFramebuffer();
 		static Ref<GBuffer> GetGbuffer();
