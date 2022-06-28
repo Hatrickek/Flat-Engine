@@ -57,7 +57,7 @@ int main() {
 	FlatEngine::Renderer::GetSSAOBuffer()->SetupSSAOShader(&shader_ssao, &shader_ssao_blur);
 
 	// lighting info
-	lightPositions.emplace_back(glm::vec3(2.0, 1.0, -2.0));
+	lightPositions.emplace_back(glm::vec3(2.0, 3.3, -2.0));
 	lightColors.emplace_back(glm::vec3(0.2, 0.2, 0.7));
 	// shader configuration
 	shader_lighting_pass.use();
@@ -75,14 +75,10 @@ int main() {
 	while (!glfwWindowShouldClose(FlatEngine::Window::GetOpenGLWindow())) {
 		FlatEngine::App::Update();
 
-		// input
-		// -----
 		ProcessInput(FlatEngine::Window::GetOpenGLWindow());
-		//patrick_model.UpdateAnimation(FlatEngine::Timestep::GetDeltaTime());
 
 		FlatEngine::UI::UpdateImgui();
-		// render
-		// ------
+		
 		FlatEngine::Renderer::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		FlatEngine::Renderer::Clear();
 

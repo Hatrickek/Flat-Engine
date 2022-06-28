@@ -21,7 +21,7 @@ private:
   static std::string const & getRoot()
   {
     static char const * envRoot = getenv("LOGL_ROOT_PATH");
-    static char const * givenRoot = (envRoot != nullptr ? envRoot : ROOTPATH);//TODO: Make this work on every machine
+    static char const * givenRoot = (envRoot != nullptr ? envRoot : ROOTPATH);
     static std::string root = (givenRoot != nullptr ? givenRoot : "");
     return root;
   }

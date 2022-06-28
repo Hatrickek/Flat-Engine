@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\core\sceneSerializer.cpp" />
+    <ClCompile Include="src\ui\panels\consolePanel.cpp" />
     <ClCompile Include="src\ui\panels\sceneHPanel.cpp" />
     <ClCompile Include="src\core\core.cpp" />
     <ClCompile Include="src\render\draw.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="src\render\framebuffer.h" />
     <ClInclude Include="src\render\renderer.h" />
     <ClInclude Include="src\core\sceneSerializer.h" />
+    <ClInclude Include="src\ui\panels\consolePanel.h" />
     <ClInclude Include="src\ui\panels\sceneHPanel.h" />
     <ClInclude Include="src\core\camera.h" />
     <ClInclude Include="src\core\components.h" />

@@ -1,6 +1,6 @@
 #pragma once
 #define FE_ARRAYSIZE(_ARR) ((int)(sizeof(_ARR) / sizeof(*(_ARR))))
-
+#include <memory>
 namespace FlatEngine {
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
@@ -10,5 +10,3 @@ namespace FlatEngine {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
-
-

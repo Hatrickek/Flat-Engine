@@ -14,7 +14,6 @@ namespace FlatEngine{
 		//Custom windows
 		static void DrawEditorUI();
 		static void ShowImguiDockSpace();
-		static void DrawConsoleWindow();
 		static void DrawDebugPanel();
 		static void DrawGizmos();
 	private:

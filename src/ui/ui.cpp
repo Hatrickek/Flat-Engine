@@ -15,8 +15,11 @@
 #include "render/ssao.h"
 #include "utils/utility.h"
 #include "render/window.h"
+
 #include "panels/sceneHPanel.h"
 #include "panels/viewportPanel.h"
+#include "panels/consolePanel.h"
+
 #include "utils/feMath.h"
 #include "uiutils.h"
 #include "core/sceneSerializer.h"
@@ -96,7 +99,7 @@ namespace FlatEngine {
 		if (Core::GetEngineState() == Core::EDITING) {
 			DrawDebugPanel();
 			SceneHPanel::DrawPanel();
-			DrawConsoleWindow();
+			ConsolePanel::DrawConsole();
 			SettingsMenu();
 		}
 	}
@@ -200,25 +203,6 @@ namespace FlatEngine {
 		ImGui::PopItemWidth();
 		ImGui::End();
 	}
-
-	void UI::DrawConsoleWindow() {
-		if (!console_window) return;
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoScrollbar;
-
-		static char InputBuf[256];
-		ImGui::Begin("Console", NULL, window_flags);
-		float m_height = ImGui::GetWindowHeight();
-		float m_width = ImGui::GetWindowWidth();
-
-		ImGui::BeginChild("Console window", ImVec2(0, m_height - 60), false, ImGuiWindowFlags_AlwaysAutoResize);
-
-		ImGui::EndChild();
-		ImGui::PushItemWidth(m_width - 10);
-		ImGui::InputText("##", InputBuf, FE_ARRAYSIZE(InputBuf));
-		ImGui::PopItemWidth();
-		ImGui::End();
-	}
-
 	void UI::ShowImguiDockSpace() {
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
