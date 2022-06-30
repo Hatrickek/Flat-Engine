@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -36,5 +35,4 @@
 /cmake-build-debug
 /.idea
 /x64
-/resources/objects/vampire
 /resources/textures
