@@ -2,13 +2,13 @@
 
 #include "render/window.h"
 
-
 namespace FlatEngine {
 	bool Input::GetKey(KeyCode key) {
 		GLFWwindow* window = Window::GetOpenGLWindow();
 		auto state = glfwGetKey(window, key);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
+	//TODO: Right now this function is the same as GetKey().
 	bool Input::GetKeyDown(KeyCode key) {
 		GLFWwindow* window = Window::GetOpenGLWindow();
 		auto state = glfwGetKey(window, key);

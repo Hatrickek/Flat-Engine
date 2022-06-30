@@ -45,7 +45,7 @@ int main() {
 	glfwSetCursorPosCallback(FlatEngine::Window::GetOpenGLWindow(), mouse_callback);
 	glfwSetScrollCallback(FlatEngine::Window::GetOpenGLWindow(), scroll_callback);
 	//**
-	 
+	
 	FlatEngine::Editor::OnInit();
 
 	// build and compile shaders
@@ -152,6 +152,7 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
+//TODO: Move to input class
 void ProcessInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_F12) == GLFW_PRESS)
 		FlatEngine::Window::ExitWindow(window);
@@ -176,7 +177,7 @@ void ProcessInput(GLFWwindow* window) {
 	if (FlatEngine::Input::GetKey(FlatEngine::Key::D))
 		camera.ProcessKeyboard(FlatEngine::RIGHT, FlatEngine::Timestep::GetDeltaTime());
 }
-
+//TODO: Move to input class
 // glfw: whenever the mouse moves, this callback is called
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 	float xpos = static_cast<float>(xposIn);
@@ -195,7 +196,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
-
+//TODO: Move to input
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(static_cast<float>(yoffset));

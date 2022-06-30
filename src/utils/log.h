@@ -12,8 +12,8 @@ namespace FlatEngine{
 	};
 }
 //log macros
-#define FE_LOG_TRACE(...) ::FlatEngine::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define FE_LOG_INFO(...) ::FlatEngine::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define FE_LOG_WARN(...) ::FlatEngine::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define FE_LOG_TRACE(...) ::FlatEngine::Log::GetCoreLogger()->trace(__VA_ARGS__) 
+#define FE_LOG_INFO(...) ::FlatEngine::Log::GetCoreLogger()->info(__VA_ARGS__) 
+#define FE_LOG_WARN(...) ::FlatEngine::Log::GetCoreLogger()->warn(__VA_ARGS__) 
 #define FE_LOG_ERROR(...) ::FlatEngine::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define FE_LOG_FATAL(...) ::FlatEngine::Log::GetCoreLogger()->fatal(__VA_ARGS__)

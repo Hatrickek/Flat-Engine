@@ -1,4 +1,5 @@
 #include "log.h"
+#include "ui/panels/consolePanel.h"
 namespace FlatEngine {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 
@@ -7,5 +8,4 @@ namespace FlatEngine {
 		s_CoreLogger = spdlog::stdout_color_mt("FlatEngine");
 		s_CoreLogger->set_level(spdlog::level::trace);
 	}
-
 }

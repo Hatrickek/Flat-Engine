@@ -87,11 +87,12 @@ namespace FlatEngine {
 	//--------------------------------------
 	//Custom Functions
 
-	static bool performance_overlay = true;
-	static bool inspector_window = true;
-	static bool console_window = true;
+	bool UI::performance_overlay = true;
+	bool UI::inspector_window = true;
+	bool UI::console_window = true;
 	static int m_GizmoType = -1;
 	static bool settingsMenuOn = false;
+	std::string lastScenePath;
 	void UI::DrawEditorUI() {
 		ShowImguiDockSpace();
 		ViewportPanel::DrawViewport();
@@ -204,6 +205,7 @@ namespace FlatEngine {
 		ImGui::End();
 	}
 	void UI::ShowImguiDockSpace() {
+		UI::EditorShortcuts();
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
@@ -236,14 +238,13 @@ namespace FlatEngine {
 		if (ImGui::BeginViewportSideBar("##TopMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
 			if (ImGui::BeginMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
-					if (ImGui::MenuItem("Open Scene")) {
+					if (ImGui::MenuItem("Open Scene", "Ctrl + O")) {
 						OpenScene();
 					}
-					if (ImGui::MenuItem("Save Scene")) {
-						FE_LOG_WARN("NOT IMPLEMENTED");
-						//SaveScene();
+					if (ImGui::MenuItem("Save Scene", "Ctrl + S")) {
+						SaveScene();
 					}
-					if(ImGui::MenuItem("Save Scene As...")){
+					if(ImGui::MenuItem("Save Scene As...", "Ctrl + Shift + S")){
 						SaveSceneAs();
 					}
 					ImGui::Separator();
@@ -262,7 +263,7 @@ namespace FlatEngine {
 				if (ImGui::BeginMenu("Window")) {
 					ImGui::MenuItem("Inspector", 0, &inspector_window);
 					ImGui::MenuItem("Scene hierarchy", 0, &SceneHPanel::scenehierarchy_window);
-					ImGui::MenuItem("Console window", 0, &console_window);
+					ImGui::MenuItem("Console window", 0, &UI::console_window);
 					ImGui::MenuItem("Performance Overlay", 0, &performance_overlay);
 					ImGui::EndMenu();
 				}
@@ -328,12 +329,19 @@ namespace FlatEngine {
 			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
 		}
+		lastScenePath = path.string();
 		Ref<Scene> newScene = CreateRef<Scene>();
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
 			Editor::SetActiveScene(newScene);
 			SceneHPanel::SetScene(Editor::GetActiveScene());
+		}
+	}
+	void UI::SaveScene(){
+		if(!lastScenePath.empty()){
+			SceneSerializer serializer(Editor::GetActiveScene());
+			serializer.Serialize(lastScenePath);
 		}
 	}
 	void UI::SaveSceneAs()
@@ -345,7 +353,19 @@ namespace FlatEngine {
 			serializer.Serialize(filepath);
 		}
 	}
-	
+	void UI::EditorShortcuts(){
+		if(Input::GetKey(Key::LeftControl)){
+			if(Input::GetKeyDown(Key::S)){
+				UI::SaveScene();
+			}
+			if(Input::GetKeyDown(Key::O)){
+				UI::OpenScene();
+			}
+			if(Input::GetKey(Key::LeftShift) && Input::GetKeyDown(Key::S)){
+				UI::SaveSceneAs();
+			}
+		}
+	}
 	void UI::ImGuiDarkTheme() {
 		ImGuiStyle* style = &ImGui::GetStyle();
 	    ImVec4* colors = style->Colors;
