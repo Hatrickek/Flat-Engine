@@ -148,7 +148,7 @@ int main() {
 		glfwSwapBuffers(FlatEngine::Window::GetOpenGLWindow());
 	}
 	FlatEngine::UI::EndImgui();
-
+	FlatEngine::App::Close();
 	glfwTerminate();
 	return 0;
 }

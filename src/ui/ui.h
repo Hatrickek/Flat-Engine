@@ -1,7 +1,7 @@
 #pragma once
 #include <filesystem>
 #include <GLFW/glfw3.h>
-
+#include <vector>
 namespace FlatEngine{
 	class UI {
 	public:
@@ -21,6 +21,9 @@ namespace FlatEngine{
 		static bool inspector_window;
 		static bool performance_overlay;
 
+		static std::string lastSaveScenePath;
+		static std::vector<std::string> lastOpenedScenes;
+		static int selectedTheme;
 	private:
 		static void OpenScene();
 		static void OpenScene(const std::filesystem::path& path);

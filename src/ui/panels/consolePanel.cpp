@@ -21,11 +21,12 @@ namespace FlatEngine{
             text.color = ImVec4(1,1,1,1);    
             break;
         case SPDLOG_LEVEL_WARN:
-            text.color = ImVec4(0.2, 0,0,1);
+            text.color = ImVec4(0.2f, 0,0,1);
         case SPDLOG_LEVEL_ERROR:
             text.color = ImVec4(1,0,0,1);
+            break;
         default:
-            text.color = ImVec4(1,1,1,1);    
+            text.color = ImVec4(1,1,1,1);
             break;
         }
         buff.emplace_back(text);
@@ -51,7 +52,7 @@ namespace FlatEngine{
             }
 		ImGui::EndChild();
 		ImGui::PushItemWidth(m_width - 10);
-        ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
+        constexpr ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
 		if(ImGui::InputText("##", InputBuf, FE_ARRAYSIZE(InputBuf), inputFlags)){
             memset(InputBuf, 0, sizeof(InputBuf));
         }

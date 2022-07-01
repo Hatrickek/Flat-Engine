@@ -147,7 +147,7 @@ namespace FlatEngine {
 		try {
 			data = YAML::LoadFile(filePath);
 		}
-		catch (YAML::ParserException e) {
+		catch (YAML::ParserException& e) {
 			return false;
 		}
 		if (!data["Scene"])

@@ -9,11 +9,12 @@
 #include "render/window.h"
 #include "resources.h"
 #include "ui/ui.h"
-
+#include "utils/config.h"
 namespace FlatEngine {
 	Ref<Scene> Editor::m_ActiveScene;
 	Ref<Camera> Editor::m_EditorCamera;
 	void Editor::OnInit() {
+		Config::LoadInternalConfig();
 		m_EditorCamera = CreateRef<Camera>(glm::vec3(0.0f, 0.0f, 5.0f));
 
 		Resources::InitResources();

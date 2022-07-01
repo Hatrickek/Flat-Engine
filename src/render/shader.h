@@ -6,8 +6,6 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
-
 #include "utils/log.h"
 
 namespace FlatEngine {

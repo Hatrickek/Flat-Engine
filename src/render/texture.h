@@ -1,9 +1,5 @@
 #pragma once
-#include <iostream>
-
 #include "utils/log.h"
-#include "stb_image.h"
-#include "glad/glad.h"
 
 namespace FlatEngine {
 	struct Texture {

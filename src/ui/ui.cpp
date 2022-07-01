@@ -23,7 +23,9 @@
 #include "utils/feMath.h"
 #include "uiutils.h"
 #include "core/sceneSerializer.h"
+#include "utils/config.h"
 #include "utils/filesystem.h"
+
 namespace FlatEngine {
 	void UI::InitUI(GLFWwindow* window) {
 		// Setup Dear ImGui context
@@ -92,7 +94,9 @@ namespace FlatEngine {
 	bool UI::console_window = true;
 	static int m_GizmoType = -1;
 	static bool settingsMenuOn = false;
-	std::string lastScenePath;
+	std::string UI::lastSaveScenePath;
+	std::vector<std::string> UI::lastOpenedScenes;
+	int UI::selectedTheme;
 	void UI::DrawEditorUI() {
 		ShowImguiDockSpace();
 		ViewportPanel::DrawViewport();
@@ -241,6 +245,17 @@ namespace FlatEngine {
 					if (ImGui::MenuItem("Open Scene", "Ctrl + O")) {
 						OpenScene();
 					}
+					if(ImGui::BeginMenu("Open Recent")){
+						for(auto scene : lastOpenedScenes){
+							if(!scene.empty()){
+								if (ImGui::MenuItem(scene.c_str())){
+									OpenScene(scene);
+								}
+							}
+						}
+						ImGui::EndMenu();
+					}
+					
 					if (ImGui::MenuItem("Save Scene", "Ctrl + S")) {
 						SaveScene();
 					}
@@ -299,20 +314,28 @@ namespace FlatEngine {
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking;
 		ImGui::Begin("Settings", &settingsMenuOn, window_flags);
 		{//Theme
-			static int m_CurrentTheme = 0;
 			const char* themes[] = {"Dark", "White"}; 
-			if(ImGui::Combo("Theme", &m_CurrentTheme, themes, FE_ARRAYSIZE(themes)))
-				switch(m_CurrentTheme) {
-				case 0:
-					ImGuiDarkTheme();
-					break;
-				case 1:
-					ImGui::StyleColorsLight();
-					break;
-				default:
-					ImGuiDarkTheme();
-					break;
-				}
+			if(ImGui::Combo("Theme", &selectedTheme, themes, FE_ARRAYSIZE(themes))) {
+				
+			}
+			switch(selectedTheme) {
+			case 0:
+				ImGuiDarkTheme();
+			break;
+			case 1:
+				ImGui::StyleColorsLight();
+			break;
+			default:
+				ImGuiDarkTheme();
+			break;
+			}
+		}
+		if(ImGui::Button("Load Config")){
+			Config::LoadConfig();
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("Save Config")) {
+			Config::SaveConfig();
 		}
 		ImGui::End();
 	}
@@ -329,7 +352,10 @@ namespace FlatEngine {
 			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
 		}
-		lastScenePath = path.string();
+		if(lastOpenedScenes.size() > 8){
+			lastOpenedScenes.erase(lastOpenedScenes.begin());
+		}
+		lastOpenedScenes.emplace_back(path.string());
 		Ref<Scene> newScene = CreateRef<Scene>();
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
@@ -339,9 +365,12 @@ namespace FlatEngine {
 		}
 	}
 	void UI::SaveScene(){
-		if(!lastScenePath.empty()){
+		if(!lastSaveScenePath.empty()){
 			SceneSerializer serializer(Editor::GetActiveScene());
-			serializer.Serialize(lastScenePath);
+			serializer.Serialize(lastSaveScenePath);
+		}
+		else{
+			UI::SaveSceneAs();
 		}
 	}
 	void UI::SaveSceneAs()
@@ -413,6 +442,8 @@ namespace FlatEngine {
 		colors[ImGuiCol_TextSelectedBg]			= ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 		colors[ImGuiCol_ModalWindowDimBg]		= ImVec4(0, 0, 0, 0.73f);
 		colors[ImGuiCol_NavWindowingDimBg]		= ImVec4(0, 0, 0, 0.73f);
+
+		selectedTheme = 0;
 	}
 	void UI::ImGuiWhiteTheme() {
 		ImGuiStyle* style = &ImGui::GetStyle();
@@ -475,5 +506,6 @@ namespace FlatEngine {
 	    colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(0.70f, 0.70f, 0.70f, 0.70f);
 	    colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.20f, 0.20f, 0.20f, 0.20f);
 	    colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+		selectedTheme = 1;
 	}
 }

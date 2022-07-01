@@ -1,6 +1,7 @@
 #pragma once
 #include "utils/timestep.h"
 #include "utils/log.h"
+#include "utils/config.h"
 namespace FlatEngine {
 	class App {
 	public:
@@ -9,6 +10,9 @@ namespace FlatEngine {
 		static void Update() {
 			glfwPollEvents();
 			Timestep::UpdateTime();
+		}
+		static void Close() {
+			Config::SaveInternalConfig();
 		}
 	};
 }
