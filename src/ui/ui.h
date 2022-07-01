@@ -26,7 +26,7 @@ namespace FlatEngine{
 		static int selectedTheme;
 	private:
 		static void OpenScene();
-		static void OpenScene(const std::filesystem::path& path);
+		static bool OpenScene(const std::filesystem::path& path);
 		static void SaveScene();
 		static void SaveSceneAs();
 		static void SettingsMenu();

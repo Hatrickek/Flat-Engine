@@ -246,10 +246,10 @@ namespace FlatEngine {
 						OpenScene();
 					}
 					if(ImGui::BeginMenu("Open Recent")){
-						for(auto scene : lastOpenedScenes){
-							if(!scene.empty()){
-								if (ImGui::MenuItem(scene.c_str())){
-									OpenScene(scene);
+						for(auto& scene : lastOpenedScenes){
+							if(!scene.empty() && ImGui::MenuItem(scene.c_str())){
+								if(!OpenScene(scene)) {
+									scene.erase();
 								}
 							}
 						}
@@ -345,12 +345,16 @@ namespace FlatEngine {
 		if (!filepath.empty())
 			OpenScene(filepath);
 	}
-	void UI::OpenScene(const std::filesystem::path& path)
+	bool UI::OpenScene(const std::filesystem::path& path)
 	{
+		if(!std::filesystem::exists(path)) {
+			FE_LOG_WARN("Could not find {0}", path.filename().string());
+			return false;
+		}
 		if (path.extension().string() != ".scene")
 		{
 			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
-			return;
+			return false;
 		}
 		if(lastOpenedScenes.size() > 8){
 			lastOpenedScenes.erase(lastOpenedScenes.begin());
@@ -363,6 +367,7 @@ namespace FlatEngine {
 			Editor::SetActiveScene(newScene);
 			SceneHPanel::SetScene(Editor::GetActiveScene());
 		}
+		return true;
 	}
 	void UI::SaveScene(){
 		if(!lastSaveScenePath.empty()){
