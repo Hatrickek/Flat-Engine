@@ -1,9 +1,9 @@
 #include "sceneHPanel.h"
 
 #include <glm/gtc/type_ptr.inl>
-
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "core/components.h"
 namespace FlatEngine {
 
 	bool SceneHPanel::scenehierarchy_window = true;
@@ -24,8 +24,18 @@ namespace FlatEngine {
 			m_SelectionContext = {};
 
 		if (ImGui::BeginPopupContextWindow(0, 1, false)) {
-			if (ImGui::MenuItem("Create Entity"))
-				m_Scene->CreateEntity("New Entity");
+			if(ImGui::BeginMenu("Create")){
+				if (ImGui::MenuItem("Empty Entity")){
+					m_Scene->CreateEntity("New Entity");
+				}
+				if (ImGui::MenuItem("Empty Mesh")){
+					m_Scene->CreateEntity("New Mesh").AddComponent<MeshRendererComponent>();
+				}
+				if (ImGui::MenuItem("Cube")){
+					m_Scene->CreateEntity("Cube").AddComponent<PrimitiveRendererComponent>();
+				}
+			ImGui::EndMenu();
+			}
 
 			ImGui::EndPopup();
 		}

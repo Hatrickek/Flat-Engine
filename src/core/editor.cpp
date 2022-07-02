@@ -10,6 +10,7 @@
 #include "resources.h"
 #include "ui/ui.h"
 #include "utils/config.h"
+#include "ui/panels/sceneHPanel.h"
 namespace FlatEngine {
 	Ref<Scene> Editor::m_ActiveScene;
 	Ref<Camera> Editor::m_EditorCamera;
@@ -49,6 +50,7 @@ namespace FlatEngine {
 	}
 	void Editor::SetActiveScene(Ref<Scene> scene) {
 		m_ActiveScene = scene;
+		SceneHPanel::SetScene(Editor::GetActiveScene());
 	}
 	Ref<Camera> Editor::GetEditorCamera() {
 		return m_EditorCamera;

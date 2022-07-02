@@ -25,6 +25,7 @@ namespace FlatEngine{
 		static std::vector<std::string> lastOpenedScenes;
 		static int selectedTheme;
 	private:
+		static void NewScene();
 		static void OpenScene();
 		static bool OpenScene(const std::filesystem::path& path);
 		static void SaveScene();

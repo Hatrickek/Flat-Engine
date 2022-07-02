@@ -242,6 +242,9 @@ namespace FlatEngine {
 		if (ImGui::BeginViewportSideBar("##TopMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
 			if (ImGui::BeginMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
+					if (ImGui::MenuItem("New Scene", "Ctrl + N")){
+						NewScene();
+					}
 					if (ImGui::MenuItem("Open Scene", "Ctrl + O")) {
 						OpenScene();
 					}
@@ -339,6 +342,10 @@ namespace FlatEngine {
 		}
 		ImGui::End();
 	}
+	void UI::NewScene(){
+		Ref<Scene> newScene = CreateRef<Scene>();
+		Editor::SetActiveScene(newScene);
+	}
 	void UI::OpenScene()
 	{
 		std::string filepath = FileDialogs::OpenFile("FlatEngine Scene (*.scene)\0*.scene\0");
@@ -365,7 +372,6 @@ namespace FlatEngine {
 		if (serializer.Deserialize(path.string()))
 		{
 			Editor::SetActiveScene(newScene);
-			SceneHPanel::SetScene(Editor::GetActiveScene());
 		}
 		return true;
 	}
@@ -389,6 +395,9 @@ namespace FlatEngine {
 	}
 	void UI::EditorShortcuts(){
 		if(Input::GetKey(Key::LeftControl)){
+			if(Input::GetKeyDown(Key::N)){
+				UI::NewScene();
+			}
 			if(Input::GetKeyDown(Key::S)){
 				UI::SaveScene();
 			}
