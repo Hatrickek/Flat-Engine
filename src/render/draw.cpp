@@ -30,7 +30,7 @@ namespace FlatEngine {
 		//	break;
 		//}
 	}
-	glm::mat4 Draw::DrawCube(Shader& shader,glm::vec4 color,glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
+	void Draw::DrawCube(Shader& shader,glm::vec4 color,glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
 		glm::mat4 m_model = glm::mat4(1.0f);
 		m_model = glm::translate(m_model, position);
 		if(rotation != glm::vec3(0)) m_model = glm::rotate(m_model, glm::radians(0.00f), rotation);
@@ -39,9 +39,17 @@ namespace FlatEngine {
 		shader.setMat4("model", m_model);
 		RenderCube();
 		shader.setVec4("color", BLANK);
-		return m_model;
 	}
-
+	void Draw::DrawQuad(Shader& shader, glm::vec4 color, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
+		glm::mat4 m_model = glm::mat4(1.0f);
+		m_model = glm::translate(m_model, position);
+		if(rotation != glm::vec3(0)) m_model = glm::rotate(m_model, glm::radians(0.00f), rotation);
+		m_model = glm::scale(m_model, scale);
+		shader.setVec4("color", color);
+		shader.setMat4("model", m_model);
+		RenderQuad();
+		shader.setVec4("color", BLANK);
+	}
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;
 	void Draw::RenderCube() {

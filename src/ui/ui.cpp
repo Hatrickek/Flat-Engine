@@ -9,7 +9,6 @@
 #include "core/core.h"
 #include "core/editor.h"
 #include "core/entity.h"
-#include "level.h" //TODO: this is temporary import for accesing the lighting properties.
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "render/ssao.h"
@@ -35,12 +34,8 @@ namespace FlatEngine {
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
-		//io.ConfigViewportsNoAutoMerge = true;
-		//io.ConfigViewportsNoTaskBarIcon = true;
-		
 		ImGuiDarkTheme();
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -52,7 +47,7 @@ namespace FlatEngine {
 		io.Fonts->AddFontFromFileTTF(FileSystem::getPath("resources/fonts/Roboto-Medium.ttf").c_str(), 16.0f);
 		io.Fonts->AddFontDefault();
 		io.Fonts->Build();
-
+		
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -188,24 +183,7 @@ namespace FlatEngine {
 
 		static float sample = 64;
 		ImGui::SliderFloat("Samples", &sample, 16, 256, "%.0f");
-
-		ImGui::Separator();
-
-		ImGui::Text("Lighting");
-		ImGui::PushItemWidth(80);
-		ImGui::Text("Position");
-		ImGui::SliderFloat(":x", &lightPositions[0].x, -10, 10, "%.2f");
-		ImGui::SameLine();
-		ImGui::SliderFloat(":y", &lightPositions[0].y, -10, 10, "%.2f");
-		ImGui::SameLine();
-		ImGui::SliderFloat(":z", &lightPositions[0].z, -10, 10, "%.2f");
-		ImGui::Text("Color");
-		ImGui::SliderFloat(":r", &lightColors[0].x, 0, 1, "%.2f");
-		ImGui::SameLine();
-		ImGui::SliderFloat(":g", &lightColors[0].y, 0, 1, "%.2f");
-		ImGui::SameLine();
-		ImGui::SliderFloat(":b", &lightColors[0].z, 0, 1, "%.2f");
-		ImGui::PopItemWidth();
+		
 		ImGui::End();
 	}
 	void UI::ShowImguiDockSpace() {
@@ -312,16 +290,8 @@ namespace FlatEngine {
 		ImGui::End();
 		ImGui::End();
 	}
-	void UI::SettingsMenu() {
-		if(!settingsMenuOn) return;
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking;
-		ImGui::Begin("Settings", &settingsMenuOn, window_flags);
-		{//Theme
-			const char* themes[] = {"Dark", "White"}; 
-			if(ImGui::Combo("Theme", &selectedTheme, themes, FE_ARRAYSIZE(themes))) {
-				
-			}
-			switch(selectedTheme) {
+	void UI::SelectTheme(const int index) {
+		switch(index) {
 			case 0:
 				ImGuiDarkTheme();
 			break;
@@ -332,6 +302,17 @@ namespace FlatEngine {
 				ImGuiDarkTheme();
 			break;
 			}
+	}
+	void UI::SettingsMenu() {
+		if(!settingsMenuOn) return;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking;
+		ImGui::Begin("Settings", &settingsMenuOn, window_flags);
+		{//Theme
+			const char* themes[] = {"Dark", "White"}; 
+			if(ImGui::Combo("Theme", &selectedTheme, themes, FE_ARRAYSIZE(themes))) {
+				SelectTheme(selectedTheme);
+			}
+			
 		}
 		if(ImGui::Button("Load Config")){
 			Config::LoadConfig();

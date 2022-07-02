@@ -11,7 +11,7 @@ namespace FlatEngine {
 		static void SetActiveScene(Ref<Scene> scene);
 		static Ref<Camera> GetEditorCamera();
 	private:
-		static std::shared_ptr<Scene> m_ActiveScene;
 		static Ref<Camera> m_EditorCamera;
+		static std::shared_ptr<Scene> m_ActiveScene;
 	};
 }

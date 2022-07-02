@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\render\lighting.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\core\sceneSerializer.cpp" />
     <ClCompile Include="src\ui\panels\consolePanel.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\render\assimp_glm_helpers.h" />
     <ClInclude Include="src\render\framebuffer.h" />
+    <ClInclude Include="src\render\lighting.h" />
     <ClInclude Include="src\render\renderer.h" />
     <ClInclude Include="src\core\sceneSerializer.h" />
     <ClInclude Include="src\ui\panels\consolePanel.h" />

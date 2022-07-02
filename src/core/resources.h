@@ -8,5 +8,6 @@ namespace FlatEngine {
 		static void InitResources();
 		static Ref<Model>  GetDefaultCube();
 		static Ref<Shader> GetDefaultShader();
+		static Ref<Shader> GetLightingShader();
 	};
 }

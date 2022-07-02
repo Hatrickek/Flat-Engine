@@ -22,7 +22,10 @@ namespace FlatEngine {
 		CUBE,
 		QUAD
 	};
-
+	enum LightType {
+		POINT,
+		DIRECTIONAL
+	};
 	struct TagComponent
 	{
 		std::string Tag;
@@ -68,6 +71,11 @@ namespace FlatEngine {
 		PrimitiveRendererComponent() = default;
 		PrimitiveRendererComponent(Primitive primitive, Ref<Shader> shader, glm::vec4 color)
 		: primitive(primitive), shader(std::move(shader)), color(color){}
+	};
+	struct LightComponent {
+		LightType type = POINT;
+		glm::vec4 color = WHITE;
+		LightComponent() = default;
 	};
 	//struct CameraComponent
 	//{

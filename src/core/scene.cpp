@@ -1,5 +1,7 @@
 #include "glm/glm.hpp"
 #include "scene.h"
+
+#include "editor.h"
 #include "render/draw.h"
 #include "entity.h"
 #include "resources.h"
@@ -45,9 +47,20 @@ namespace FlatEngine {
 		}
 		{
 			const auto group = m_Registry.view<TransformComponent, PrimitiveRendererComponent>();
-			for(auto entity : group) {
+			for(const auto entity : group) {
 				auto [transform, prc] = group.get<TransformComponent, PrimitiveRendererComponent>(entity);
 				Draw::DrawPrimitive(prc, transform.Translation, transform.Scale, transform.Rotation);
+			}
+		}
+		{
+			const auto group = m_Registry.view<TransformComponent, LightComponent>();
+			for(const auto entity : group) {
+				auto [transform, light] = group.get<TransformComponent, LightComponent>(entity);
+				Draw::DrawQuad(*Resources::GetDefaultShader(), light.color, transform.Translation, transform.Scale, transform.Rotation);
+				Resources::GetLightingShader()->use();
+				glm::vec3 lightPosView = glm::vec3(FlatEngine::Editor::GetEditorCamera()->GetViewMatrix() * glm::vec4(transform.Translation, 1.0));
+				Resources::GetLightingShader()->setVec3("light.Position", lightPosView);
+				Resources::GetLightingShader()->setVec3("light.Color", light.color);
 			}
 		}
 	}
@@ -73,5 +86,9 @@ namespace FlatEngine {
 	{
 		component.shader = Resources::GetDefaultShader();
 		component.primitive = CUBE;
+	}
+	template<>
+	void Scene::OnComponentAdded<LightComponent>(Entity entity, LightComponent& component)
+	{
 	}
 }

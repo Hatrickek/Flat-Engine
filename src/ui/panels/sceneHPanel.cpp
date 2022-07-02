@@ -34,7 +34,10 @@ namespace FlatEngine {
 				if (ImGui::MenuItem("Cube")){
 					m_Scene->CreateEntity("Cube").AddComponent<PrimitiveRendererComponent>();
 				}
-			ImGui::EndMenu();
+				if (ImGui::MenuItem("Light")) {
+					m_Scene->CreateEntity("New Light").AddComponent<LightComponent>();
+				}
+				ImGui::EndMenu();
 			}
 
 			ImGui::EndPopup();
@@ -48,7 +51,7 @@ namespace FlatEngine {
 		m_Scene = scene;
 	}
 	Entity SceneHPanel::GetSelectedEntity() {
-			return m_SelectionContext;
+		return m_SelectionContext;
 	}
 	template <typename T, typename ComponentFunction>
 	static void DrawComponent(const std::string& name, Entity entity, ComponentFunction componentFunction) {
@@ -217,35 +220,42 @@ namespace FlatEngine {
 		if (ImGui::BeginPopup("Add Component")) {
 			//Add component panel
 			if (ImGui::MenuItem("Mesh Renderer"))
-				{
-					if (!m_SelectionContext.HasComponent<MeshRendererComponent>())
-						m_SelectionContext.AddComponent<MeshRendererComponent>();
-					else
-						FE_LOG_WARN("This entity already has the Mesh Renderer Component!");
-					ImGui::CloseCurrentPopup();
-				}
+			{
+				if (!m_SelectionContext.HasComponent<MeshRendererComponent>())
+					m_SelectionContext.AddComponent<MeshRendererComponent>();
+				else
+					FE_LOG_WARN("This entity already has the Mesh Renderer Component!");
+				ImGui::CloseCurrentPopup();
+			}
 
-				if (ImGui::MenuItem("Primitive Renderer"))
-				{
-					if (!m_SelectionContext.HasComponent<PrimitiveRendererComponent>())
-						m_SelectionContext.AddComponent<PrimitiveRendererComponent>();
-					else
-						FE_LOG_WARN("This entity already has the Primitive Renderer Component!");
-					ImGui::CloseCurrentPopup();
-				}
+			if (ImGui::MenuItem("Primitive Renderer"))
+			{
+				if (!m_SelectionContext.HasComponent<PrimitiveRendererComponent>())
+					m_SelectionContext.AddComponent<PrimitiveRendererComponent>();
+				else
+					FE_LOG_WARN("This entity already has the Primitive Renderer Component!");
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Light Component")) {
+				if (!m_SelectionContext.HasComponent<LightComponent>())
+					m_SelectionContext.AddComponent<LightComponent>();
+				else
+					FE_LOG_WARN("This entity already has the Light Component!");
+				ImGui::CloseCurrentPopup();
+
+			}
 			ImGui::EndPopup();
 		}
 		ImGui::PopItemWidth();
-		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
-		{
+		DrawComponent<TransformComponent>("Transform", entity, [](auto& component){
 			DrawVec3Control("Translation", component.Translation);
 			glm::vec3 rotation = glm::degrees(component.Rotation);
 			DrawVec3Control("Rotation", rotation);
 			component.Rotation = glm::radians(rotation);
 			DrawVec3Control("Scale", component.Scale, 1.0f);
 		});
-		DrawComponent<MeshRendererComponent>("Mesh Renderer", entity, [](auto& component)
-		{
+		DrawComponent<MeshRendererComponent>("Mesh Renderer", entity, [](auto& component){
 			auto& mesh	 = component.model;
 			auto& shader = component.shader;
 			auto& color	 = component.color;
@@ -254,14 +264,23 @@ namespace FlatEngine {
 			ImGui::Text("Textures: %d",textures.size());
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));
 		});
-		DrawComponent<PrimitiveRendererComponent>("Primitive Renderer", entity, [](auto& component)
-		{
+		DrawComponent<PrimitiveRendererComponent>("Primitive Renderer", entity, [](auto& component){
 			auto& primitive = component.primitive;
 			auto& shader = component.shader;
 			auto& color	 = component.color;
 			const char* primitives[] = {"QUAD", "CUBE","EMPTY"};
 			static int selected_primitive = 1;
 			ImGui::Combo("Primitive", &selected_primitive, primitives, FE_ARRAYSIZE(primitives));
+			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+		});
+		DrawComponent<LightComponent>("Light Component", entity, [](auto& component){
+			auto& light_type = component.type;
+			auto& color	 = component.color;
+			const char* types[] = {"Directional", "Point"};
+			static int selected_type = 1;
+			if(ImGui::Combo("Type", &selected_type, types, FE_ARRAYSIZE(types))) {
+				light_type = static_cast<LightType>(selected_type);
+			}
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));
 		});
 	}

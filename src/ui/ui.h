@@ -32,6 +32,8 @@ namespace FlatEngine{
 		static void SaveSceneAs();
 		static void SettingsMenu();
 		static void EditorShortcuts();
+
+		static void SelectTheme(int index);
 		static void ImGuiDarkTheme();
 		static void ImGuiWhiteTheme();
 	};
