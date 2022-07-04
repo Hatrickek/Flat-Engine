@@ -34,14 +34,11 @@ namespace FlatEngine {
 		Entity patrick = m_ActiveScene->CreateEntity("PatrickModel");
 		patrick.GetComponent<TransformComponent>().Scale = glm::vec3(.3f);
 		patrick.GetComponent<TransformComponent>().Translation = glm::vec3(2.5f, -0.5f, -3.0);
-		patrick.GetComponent<TransformComponent>().Rotation = glm::vec3(0,90,0);
+		patrick.GetComponent<TransformComponent>().Rotation = glm::vec3(0.f,90.f,0.f);
 		patrick.AddComponent<MeshRendererComponent>(CreateRef<Model>(patrick_model), Resources::GetDefaultShader(), BLANK);
 
 		UI::InitUI(Window::GetOpenGLWindow());
 	}
-	//void Editor::DrawUI() {
-	//	
-	//}
 	void Editor::OnUpdate() {
 		m_ActiveScene->OnUpdate(Timestep::GetDeltaTime());
 	}

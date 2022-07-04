@@ -26,6 +26,10 @@ namespace FlatEngine {
 		POINT,
 		DIRECTIONAL
 	};
+	enum RigidBodyType {
+		STATIC,
+		DYNAMIC
+	};
 	struct TagComponent
 	{
 		std::string Tag;
@@ -76,6 +80,14 @@ namespace FlatEngine {
 		LightType type = POINT;
 		glm::vec4 color = WHITE;
 		LightComponent() = default;
+	};
+	struct RigidBodyComponent {
+		RigidBodyType type = STATIC;
+		RigidBodyComponent() = default;
+	};
+	struct BoxColliderComponent {
+		glm::vec3 size = glm::vec3(1);
+		BoxColliderComponent() = default;
 	};
 	//struct CameraComponent
 	//{

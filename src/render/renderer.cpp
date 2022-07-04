@@ -1,5 +1,4 @@
 #include "renderer.h"
-
 #include "ui/panels/viewportPanel.h"
 
 namespace FlatEngine {

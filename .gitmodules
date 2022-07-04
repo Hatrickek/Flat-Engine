@@ -1,0 +1,3 @@
+[submodule "vendor/physx"]
+	path = vendor/physx
+	url = https://github.com/NVIDIAGameWorks/PhysX.git

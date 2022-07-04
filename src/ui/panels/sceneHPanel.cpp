@@ -243,7 +243,20 @@ namespace FlatEngine {
 				else
 					FE_LOG_WARN("This entity already has the Light Component!");
 				ImGui::CloseCurrentPopup();
-
+			}
+			if (ImGui::MenuItem("Rigidbody")) {
+				if (!m_SelectionContext.HasComponent<RigidBodyComponent>())
+					m_SelectionContext.AddComponent<RigidBodyComponent>();
+				else
+					FE_LOG_WARN("This entity already has the Rigidbody Component!");
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Box Collider")) {
+				if (!m_SelectionContext.HasComponent<BoxColliderComponent>())
+					m_SelectionContext.AddComponent<BoxColliderComponent>();
+				else
+					FE_LOG_WARN("This entity already has the Box Collider Component!");
+				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
 		}
@@ -282,6 +295,17 @@ namespace FlatEngine {
 				light_type = static_cast<LightType>(selected_type);
 			}
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+		});
+		DrawComponent<RigidBodyComponent>("Rigidbody Component", entity, [](auto& component){
+			auto& type = component.type;
+			const char* types[] = {"Static", "Dynamic"};
+			static int selected_type = 0;
+			if(ImGui::Combo("Type", &selected_type, types, FE_ARRAYSIZE(types))) {
+				type = static_cast<RigidBodyType>(selected_type);
+			}
+		});
+		DrawComponent<BoxColliderComponent>("Box Collider Component", entity, [](auto& component){
+			DrawVec3Control("Size", component.size, 1.0f);
 		});
 	}
 }
