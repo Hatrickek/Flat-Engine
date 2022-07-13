@@ -20,7 +20,7 @@ namespace FlatEngine {
 		Renderer::CreateFrameBuffer();
 		Renderer::CreateGBuffer();
 		Renderer::CreateSSAOBuffers();
-		
+
 		EditorConfig::LoadInternalConfig();
 		Ref<Camera> m_EditorCamera = CreateRef<Camera>(glm::vec3(0.0f, 0.0f, 5.0f));
 		m_EditorCamera->SetPosition(glm::vec3(1, 2, 5));
@@ -35,10 +35,6 @@ namespace FlatEngine {
 		//Model patrick_model(FileSystem::getPath("resources/objects/patrick_animated/patrick_animated.obj"));
 
 		m_ActiveScene = CreateRef<Scene>();
-
-		Entity cube = m_ActiveScene->CreateEntity("Cube");
-		cube.AddComponent<PrimitiveRendererComponent>().primitive = CUBE;
-		cube.GetComponent<TransformComponent>().Scale = glm::vec3(10, 0.2, 10);
 
 		//Entity rsr = m_ActiveScene->CreateEntity("RsrModel");
 		//rsr.GetComponent<TransformComponent>().Scale = glm::vec3(1.5f);
@@ -65,7 +61,7 @@ namespace FlatEngine {
 			Renderer::GetCamera(0)->OnUpdate();
 		Renderer::ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		Renderer::Clear();
-		
+
 		Renderer::GetGbuffer()->Begin();
 		glm::mat4 projection = Renderer::GetCamera(0)->GetProjectionMatrix();
 		glm::mat4 view = Renderer::GetCamera(0)->GetViewMatrix();
@@ -75,9 +71,9 @@ namespace FlatEngine {
 		Resources::GetSSAOGeometryShader()->setMat4("view", view);
 		if(m_ActiveScene)
 			m_ActiveScene->OnUpdate(Timestep::GetDeltaTime());
-		
+
 		Renderer::GetGbuffer()->End();
-		
+
 		Renderer::GetSSAOBuffer()->BeginSSAOTexture(projection, Renderer::GetGbuffer()->gPosition, Renderer::GetGbuffer()->gNormal);
 		Draw::RenderQuad();
 		Renderer::GetSSAOBuffer()->EndSSAOTexture();
@@ -85,18 +81,18 @@ namespace FlatEngine {
 		Renderer::GetSSAOBuffer()->BeginSSAOBlurTexture();
 		Draw::RenderQuad();
 		Renderer::GetSSAOBuffer()->EndSSAOBlurTexture();
-		
+
 		Lighting::UpdateLighting();
-		
+
 		Renderer::BeginRendering();
 		Draw::RenderQuad();
 		Renderer::EndRendering();
-		
-		if(Input::GetKeyDown(Key::F)){
-			Ref<Scene> newScene = CreateRef<Scene>(); 
+
+		if(Input::GetKeyDown(Key::F)) {
+			Ref<Scene> newScene = CreateRef<Scene>();
 			m_ActiveScene = newScene;
 		}
-		
+
 	}
 	void EditorLayer::OnImGuiRender() {
 		EditorShortcuts();
@@ -135,16 +131,17 @@ namespace FlatEngine {
 					OpenScene();
 				}
 				if(ImGui::BeginMenu("Open Recent")) {
-					//for(auto& scene : PanelSettings::lastOpenedScenes) {
-					//	if(!scene.empty()) {
-					//		//TODO:FIX
-					//		if(ImGui::MenuItem(scene.c_str())) {
-					//			if(!OpenScene(scene)) {
-					//				scene.erase();
-					//			}
-					//		}
-					//	}
-					//}
+					for(auto& scene : PanelSettings::lastOpenedScenes) {
+						if(!scene.empty()) {
+							//TODO:FIX
+							const char* name = scene.c_str();
+							if(ImGui::MenuItem(name)) {
+								if(!OpenScene(scene)) {
+									scene.erase();
+								}
+							}
+						}
+					}
 					ImGui::EndMenu();
 				}
 
@@ -214,8 +211,17 @@ namespace FlatEngine {
 			if(Input::GetKey(Key::LeftShift) && Input::GetKeyDown(Key::S)) {
 				EditorLayer::SaveSceneAs();
 			}
+			//@TEMP code because Input::GetKeyDown() works the same way as GetKey().
+			if(Input::GetKeyDown(Key::D)) {
+				EditorLayer::GetActiveScene()->DuplicateEntity(SceneHPanel::GetSelectedEntity());
+			}
+			//------------
 		}
-		
+		if(Input::GetKeyDown(Key::F2))
+			SceneHPanel::renameEntity = true;
+		else
+			SceneHPanel::renameEntity = false;
+
 	}
 	void EditorLayer::NewScene() {
 		Ref<Scene> newScene = CreateRef<Scene>();
@@ -264,6 +270,7 @@ namespace FlatEngine {
 		if(!filepath.empty()) {
 			SceneSerializer serializer(EditorLayer::GetActiveScene());
 			serializer.Serialize(filepath);
+			PanelSettings::lastSaveScenePath = filepath;
 		}
 	}
 	void EditorLayer::SettingsPanel() {

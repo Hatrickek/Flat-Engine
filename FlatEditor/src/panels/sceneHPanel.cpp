@@ -8,7 +8,7 @@
 namespace FlatEngine {
 	bool SceneHPanel::scenehierarchy_window = true;
 	Entity SceneHPanel::m_SelectionContext = {};
-
+	bool SceneHPanel::renameEntity = false;
 	void SceneHPanel::DrawPanel() {
 		if(!scenehierarchy_window) return;
 
@@ -201,6 +201,8 @@ namespace FlatEngine {
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
 			char buffer[128] = {};
 			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
+			if(renameEntity)
+				ImGui::SetKeyboardFocusHere();
 			if(ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
 				tag = std::string(buffer);
 			}
