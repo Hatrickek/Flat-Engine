@@ -24,13 +24,13 @@ namespace FlatEngine {
 		Animation(const std::string& animationPath, Model* model) {
 			Assimp::Importer importer;
 			const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
-			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+			if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 			{
 				FE_LOG_ERROR("ERROR::ASSIMP:: {}", importer.GetErrorString());
 				return;
 			}
 			assert(scene && scene->mRootNode);
-			if(!scene->HasAnimations()){
+			if(!scene->HasAnimations()) {
 				FE_LOG_WARN("ERROR::ASSIMP:: Number of animations: {}", scene->mNumAnimations);
 			}
 			else {
@@ -40,7 +40,7 @@ namespace FlatEngine {
 				aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
 				globalTransformation = globalTransformation.Inverse();
 				ReadHeirarchyData(m_RootNode, scene->mRootNode);
-				ReadMissingBones(animation, *model);	
+				ReadMissingBones(animation, *model);
 			}
 		}
 
@@ -48,15 +48,13 @@ namespace FlatEngine {
 		}
 
 		Bone* FindBone(const std::string& name) {
-			auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),[&](const Bone& Bone)
-			                         {
-				                         return Bone.GetBoneName() == name;
-			                         }
+			auto iter = std::find_if(m_Bones.begin(), m_Bones.end(), [&](const Bone& Bone) {
+				return Bone.GetBoneName() == name;
+				}
 			);
-			if (iter == m_Bones.end()) return nullptr;
+			if(iter == m_Bones.end()) return nullptr;
 			return &(*iter);
 		}
-
 
 		float GetTicksPerSecond() { return m_TicksPerSecond; }
 		float GetDuration() { return m_Duration; }
@@ -74,16 +72,16 @@ namespace FlatEngine {
 			int& boneCount = model.GetBoneCount(); //getting the m_BoneCounter from Model class
 
 			//reading channels(bones engaged in an animation and their keyframes)
-			for (int i = 0; i < size; i++) {
+			for(int i = 0; i < size; i++) {
 				auto channel = animation->mChannels[i];
 				std::string boneName = channel->mNodeName.data;
 
-				if (!boneInfoMap.contains(boneName)) {
+				if(!boneInfoMap.contains(boneName)) {
 					boneInfoMap[boneName].id = boneCount;
 					boneCount++;
 				}
 				m_Bones.push_back(Bone(channel->mNodeName.data,
-				                       boneInfoMap[channel->mNodeName.data].id, channel));
+					boneInfoMap[channel->mNodeName.data].id, channel));
 			}
 
 			m_BoneInfoMap = boneInfoMap;
@@ -96,7 +94,7 @@ namespace FlatEngine {
 			dest.transformation = AssimpGLMHelpers::ConvertMatrixToGLMFormat(src->mTransformation);
 			dest.childrenCount = src->mNumChildren;
 
-			for (int i = 0; i < src->mNumChildren; i++) {
+			for(int i = 0; i < src->mNumChildren; i++) {
 				AssimpNodeData newData;
 				ReadHeirarchyData(newData, src->mChildren[i]);
 				dest.children.push_back(newData);
@@ -109,5 +107,4 @@ namespace FlatEngine {
 		AssimpNodeData m_RootNode;
 		std::map<std::string, BoneInfo> m_BoneInfoMap;
 	};
-	
 }

@@ -1,5 +1,4 @@
 #include "log.h"
-#include "ui/panels/consolePanel.h"
 namespace FlatEngine {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 

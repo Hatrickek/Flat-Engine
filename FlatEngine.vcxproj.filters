@@ -41,9 +41,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\sandbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="vendor\glad.c">
       <Filter>vendor\glad</Filter>
     </ClCompile>
@@ -71,12 +68,6 @@
     <ClCompile Include="vendor\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\level.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ui\ui.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\input.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -95,9 +86,6 @@
     <ClCompile Include="src\render\ssao.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\editor.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\entitity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -108,9 +96,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\render\draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ui\panels\sceneHPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\resources.cpp">
@@ -134,25 +119,34 @@
     <ClCompile Include="vendor\ImGuizmo\GraphEditor.cpp">
       <Filter>vendor\imguizmo</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\uiutils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\sceneSerializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ui\panels\viewportPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\render\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui\panels\consolePanel.cpp">
+    <ClCompile Include="src\render\lighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\layerstack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imguilayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\lighting.cpp">
+    <ClCompile Include="src\utils\uiutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -283,9 +277,6 @@
     <ClInclude Include="vendor\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>vendor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\ui.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="src\render\draw.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -328,19 +319,10 @@
     <ClInclude Include="src\render\ssao.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\editor.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\keycodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\components.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\FlatEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ui\panels\sceneHPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\resources.h">
@@ -366,9 +348,6 @@
     </ClInclude>
     <ClInclude Include="vendor\ImGuizmo\GraphEditor.h">
       <Filter>vendor\imguizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ui\uiutils.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\sceneSerializer.h">
       <Filter>Header Files</Filter>
@@ -436,9 +415,6 @@
     <ClInclude Include="src\render\framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\panels\viewportPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\render\renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -451,13 +427,46 @@
     <ClInclude Include="src\utils\rootpath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ui\panels\consolePanel.h">
+    <ClInclude Include="src\render\lighting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\animation\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\animation\animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\animation\animdata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\animation\bone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FlatEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\layerstack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imguilayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\lighting.h">
+    <ClInclude Include="src\utils\uiutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\scriptableEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

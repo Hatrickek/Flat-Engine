@@ -15,14 +15,13 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <format>
-
 #include "assimp_glm_helpers.h"
 #include "utils/log.h"
 namespace FlatEngine {
 	class Model {
 	public:
 		std::vector<Texture> textures_loaded;
+		std::vector<glm::vec4> colors;
 		std::vector<Mesh> meshes;
 		std::string directory;
 		std::string m_Path;
@@ -130,9 +129,11 @@ namespace FlatEngine {
 			std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 			textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
+			loadMaterialColors(material);
+
 			ExtractBoneWeightForVertices(vertices, mesh, scene);
 
-			return Mesh(vertices, indices, textures);
+			return Mesh(vertices, indices, textures, colors);
 		}
 
 		void SetVertexBoneData(Vertex& vertex, int boneID, float weight) {
@@ -217,7 +218,13 @@ namespace FlatEngine {
 
 			return textureID;
 		}
-
+		void loadMaterialColors(aiMaterial* mat){
+			glm::vec4 diffuseColor = glm::vec4(1.0f);
+			aiColor4D diffuse;
+			if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
+				diffuseColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+			colors.emplace_back(diffuseColor);
+		}
 		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName) {
 			std::vector<Texture> textures;
 			for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
@@ -225,7 +232,7 @@ namespace FlatEngine {
 				mat->GetTexture(type, i, &str);
 				bool skip = false;
 				for (unsigned int j = 0; j < textures_loaded.size(); j++) {
-					if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0) {
+					if (std::strcmp(textures_loaded[j].m_Path.data(), str.C_Str()) == 0) {
 						textures.push_back(textures_loaded[j]);
 						skip = true;
 						break;
@@ -233,12 +240,12 @@ namespace FlatEngine {
 				}
 				if (!skip) {
 					Texture texture;
-					texture.id = TextureFromFile(str.C_Str(), this->directory, true);
-					texture.type = typeName;
-					texture.path = str.C_Str();
+					texture.m_ID = TextureFromFile(str.C_Str(), this->directory, true);
+					texture.m_Type = typeName;
+					texture.m_Path = str.C_Str();
 					textures.push_back(texture);
 					textures_loaded.push_back(texture);
-					FE_LOG_INFO("Texture loaded id: {} - name: {}", texture.id, str.C_Str());
+					FE_LOG_INFO("Texture loaded id: {} - name: {}", texture.m_ID, str.C_Str());
 				}
 			}
 			return textures;

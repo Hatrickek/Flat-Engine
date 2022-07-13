@@ -2,8 +2,8 @@
 #include "ssao.h"
 namespace FlatEngine {
 		unsigned int SSAO::width, SSAO::height;
-		Shader* SSAO::shader_ssao;
-		Shader* SSAO::shader_ssao_blur;
+		Ref<Shader> SSAO::shader_ssao;
+		Ref<Shader> SSAO::shader_ssao_blur;
 
 		SSAO::SSAO(unsigned int m_width, unsigned int m_height) {
 			width  = m_width;
@@ -15,7 +15,7 @@ namespace FlatEngine {
 			// SSAO color buffer
 			glGenTextures(1, &ssaoColorBuffer);
 			glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_FLOAT, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_width, m_height, 0, GL_RED, GL_FLOAT, NULL);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
@@ -25,7 +25,7 @@ namespace FlatEngine {
 			glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
 			glGenTextures(1, &ssaoColorBufferBlur);
 			glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_FLOAT, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_width, m_height, 0, GL_RED, GL_FLOAT, NULL);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
@@ -65,7 +65,7 @@ namespace FlatEngine {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		}
 		SSAO::~SSAO() = default;
-		void SSAO::SetupSSAOShader(Shader* m_shader_ssao, Shader* m_shader_ssao_blur) {
+		void SSAO::SetupSSAOShader(Ref<Shader> m_shader_ssao, Ref<Shader> m_shader_ssao_blur) {
 			shader_ssao = m_shader_ssao;
 			shader_ssao_blur = m_shader_ssao_blur;
 			shader_ssao->use();
@@ -120,7 +120,7 @@ namespace FlatEngine {
 		void SSAO::EndSSAOBlurTexture() {
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
-		int SSAO::SetKernelSize(static int value) {
+		int SSAO::SetKernelSize(int value) {
 			ssao_kernel_size = value;
 			return ssao_kernel_size;
 		}

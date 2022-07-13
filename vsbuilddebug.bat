@@ -1,1 +1,0 @@
-MSBuild.exe .\FlatEngine.sln /p:Configuration=Debug

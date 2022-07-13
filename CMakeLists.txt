@@ -1,14 +1,16 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.20)
 
 project(FlatEngine) 
 set(CMAKE_GENERATOR_PLATFORM x64)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+if(MSVC)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+endif(MSVC)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS -DNOMINMAX -DGLFW_INCLUDE_NONE)
+add_compile_options(-Wvolatile)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(WIN32)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -57,6 +59,7 @@ file(GLOB SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(FlatEngine ${OPENGL_LIBRARIES})
 target_link_libraries(FlatEngine glfw3)
-#target_link_libraries(FlatEngine yaml-cpp)
+#TODO: Add ability to automatically switch between release and debug build.
+#target_link_libraries(FlatEngine yaml-cpp) #for the release build
 target_link_libraries(FlatEngine yaml-cppd)
 target_link_libraries(FlatEngine assimp-vc143-mt)

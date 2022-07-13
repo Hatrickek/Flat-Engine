@@ -1,5 +1,6 @@
 #pragma once
 #include "scene.h"
+#include "utils/utility.h"
 namespace FlatEngine {
 	class SceneSerializer {
 	public:

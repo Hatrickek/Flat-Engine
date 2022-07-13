@@ -1,10 +1,10 @@
 #include "window.h"
 
 #include "utils/log.h"
-
+#include "core/application.h"
 namespace FlatEngine {
-	unsigned int Window::SCR_WIDTH = 1600;
-	unsigned int Window::SCR_HEIGHT = 900;
+	int Window::SCR_WIDTH = 1600;
+	int Window::SCR_HEIGHT = 900;
 	GLFWwindow* Window::window;
 	void Window::InitOpenGLWindow() {
 		glfwInit();
@@ -13,21 +13,28 @@ namespace FlatEngine {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		// glfw window creation
-		window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "FlatEngine", NULL, NULL);
+		window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, Application::Get().m_Spec.Name.c_str(), NULL, NULL);
 		if (window == NULL) {
 			FE_LOG_ERROR("Failed to create GLFW window");
 			glfwTerminate();
-			ExitWindow(window);
 		}
 		glfwMakeContextCurrent(window);
-
-		Input::SetCursorState(Input::CURSOR_STATE_DISABLED, window);
+		glfwSetWindowCloseCallback(window, CloseWindow);
+		Input::SetCursorState(Input::CursorState::DISABLED, window);
 
 		// glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			FE_LOG_ERROR("Failed to initialize GLAD");
-			ExitWindow(window);
+			glfwTerminate();
 		}
+	}
+	void Window::UpdateWindow() {
+		glfwPollEvents();
+		glfwSwapBuffers(GetOpenGLWindow());
+	}
+	void Window::CloseWindow(GLFWwindow* window)
+	{
+		Application::Get().Close();
 	}
 	GLFWwindow* Window::GetOpenGLWindow() {
 		return window;
@@ -37,8 +44,5 @@ namespace FlatEngine {
 		size.x = static_cast<float>(SCR_WIDTH);
 		size.y = static_cast<float>(SCR_HEIGHT);
 		return size;
-	}
-	void Window::ExitWindow(GLFWwindow* m_window) {
-		glfwSetWindowShouldClose(m_window, true);
 	}
 }

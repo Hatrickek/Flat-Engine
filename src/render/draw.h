@@ -3,6 +3,7 @@
 
 #include "shader.h"
 #include "core/components.h"
+#include "core/core.h"
 namespace FlatEngine {
 	class Draw {
 	public:

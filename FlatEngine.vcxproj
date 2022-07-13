@@ -11,14 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\application.cpp" />
+    <ClCompile Include="src\core\layer.cpp" />
+    <ClCompile Include="src\core\layerstack.cpp" />
+    <ClCompile Include="src\physics\physics.cpp" />
     <ClCompile Include="src\render\lighting.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\core\sceneSerializer.cpp" />
-    <ClCompile Include="src\ui\panels\consolePanel.cpp" />
-    <ClCompile Include="src\ui\panels\sceneHPanel.cpp" />
+    <ClCompile Include="src\ui\imguilayer.cpp" />
     <ClCompile Include="src\core\core.cpp" />
     <ClCompile Include="src\render\draw.cpp" />
-    <ClCompile Include="src\core\editor.cpp" />
     <ClCompile Include="src\core\entitity.cpp" />
     <ClCompile Include="src\core\input.cpp" />
     <ClCompile Include="src\utils\config.cpp" />
@@ -28,13 +30,9 @@
     <ClCompile Include="src\core\scene.cpp" />
     <ClCompile Include="src\render\ssao.cpp" />
     <ClCompile Include="src\render\texture.cpp" />
-    <ClCompile Include="src\ui\panels\viewportPanel.cpp" />
-    <ClCompile Include="src\ui\ui.cpp" />
-    <ClCompile Include="src\ui\uiutils.cpp" />
     <ClCompile Include="src\render\window.cpp" />
-    <ClCompile Include="src\level.cpp" />
-    <ClCompile Include="src\sandbox.cpp" />
     <ClCompile Include="src\utils\feMath.cpp" />
+    <ClCompile Include="src\utils\uiutils.cpp" />
     <ClCompile Include="vendor\glad.c" />
     <ClCompile Include="vendor\ImGuizmo\GraphEditor.cpp" />
     <ClCompile Include="vendor\ImGuizmo\ImCurveEdit.cpp" />
@@ -52,23 +50,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\a\includes\GLFW\glfw3.h" />
+    <ClInclude Include="src\core\EntryPoint.h" />
+    <ClInclude Include="src\core\layer.h" />
     <ClInclude Include="src\core\application.h" />
+    <ClInclude Include="src\core\layerstack.h" />
+    <ClInclude Include="src\core\scriptableEntity.h" />
+    <ClInclude Include="src\FlatEngine.h" />
+    <ClInclude Include="src\physics\physics.h" />
+    <ClInclude Include="src\render\animation\animation.h" />
+    <ClInclude Include="src\render\animation\animator.h" />
+    <ClInclude Include="src\render\animation\animdata.h" />
+    <ClInclude Include="src\render\animation\bone.h" />
     <ClInclude Include="src\render\assimp_glm_helpers.h" />
     <ClInclude Include="src\render\framebuffer.h" />
     <ClInclude Include="src\render\lighting.h" />
     <ClInclude Include="src\render\renderer.h" />
     <ClInclude Include="src\core\sceneSerializer.h" />
-    <ClInclude Include="src\ui\panels\consolePanel.h" />
-    <ClInclude Include="src\ui\panels\sceneHPanel.h" />
+    <ClInclude Include="src\ui\imguilayer.h" />
     <ClInclude Include="src\core\camera.h" />
     <ClInclude Include="src\core\components.h" />
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\render\draw.h" />
-    <ClInclude Include="src\core\editor.h" />
     <ClInclude Include="src\core\entity.h" />
     <ClInclude Include="src\utils\config.h" />
     <ClInclude Include="src\utils\filesystem.h" />
-    <ClInclude Include="src\core\FlatEngine.h" />
     <ClInclude Include="src\render\gbuffer.h" />
     <ClInclude Include="src\core\input.h" />
     <ClInclude Include="src\core\keycodes.h" />
@@ -82,9 +87,7 @@
     <ClInclude Include="src\render\texture.h" />
     <ClInclude Include="src\utils\rootpath.h" />
     <ClInclude Include="src\utils\timestep.h" />
-    <ClInclude Include="src\ui\panels\viewportPanel.h" />
-    <ClInclude Include="src\ui\ui.h" />
-    <ClInclude Include="src\ui\uiutils.h" />
+    <ClInclude Include="src\utils\uiutils.h" />
     <ClInclude Include="src\utils\utility.h" />
     <ClInclude Include="src\render\window.h" />
     <ClInclude Include="src\input.h" />
@@ -162,13 +165,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -186,21 +189,26 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin-int\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;NOMINMAX;GLFW_INCLUDE_NONE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;NOMINMAX;GLFW_INCLUDE_NONE</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>vendor;src;vendor\imgui;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>None</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -218,7 +226,7 @@
       <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>

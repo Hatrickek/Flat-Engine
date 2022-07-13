@@ -1,6 +1,6 @@
 #pragma once
 #include <GLFW/glfw3.h>
-
+#include "core/core.h"
 namespace FlatEngine{
 
     class Timestep{

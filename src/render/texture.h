@@ -2,11 +2,17 @@
 #include "utils/log.h"
 
 namespace FlatEngine {
-	struct Texture {
-		unsigned int id;
-		std::string type;
-		std::string path;
+	class Texture {
+	public:
+		uint32_t m_ID;
+		std::string m_Type;
+		std::string m_Path;
+		uint32_t m_Width, m_Height;
+		Texture() = default;
+		Texture(const char* path);
+		~Texture();
+	private:
+		static unsigned int TextureFromFile(const char* path, bool gammaCorrection = false);
 	};
 
-	unsigned int load_texture(const char* path, bool gammaCorrection);
 }

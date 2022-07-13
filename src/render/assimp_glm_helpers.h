@@ -6,13 +6,10 @@
 #include<glm/glm.hpp>
 #include<glm/gtc/quaternion.hpp>
 
-
-class AssimpGLMHelpers
-{
+class AssimpGLMHelpers {
 public:
 
-	static inline glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from)
-	{
+	static inline glm::mat4 ConvertMatrixToGLMFormat(const aiMatrix4x4& from) {
 		glm::mat4 to;
 		//the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
 		to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
@@ -22,13 +19,11 @@ public:
 		return to;
 	}
 
-	static inline glm::vec3 GetGLMVec(const aiVector3D& vec) 
-	{ 
-		return glm::vec3(vec.x, vec.y, vec.z); 
+	static inline glm::vec3 GetGLMVec(const aiVector3D& vec) {
+		return glm::vec3(vec.x, vec.y, vec.z);
 	}
 
-	static inline glm::quat GetGLMQuat(const aiQuaternion& pOrientation)
-	{
+	static inline glm::quat GetGLMQuat(const aiQuaternion& pOrientation) {
 		return glm::quat(pOrientation.w, pOrientation.x, pOrientation.y, pOrientation.z);
 	}
 };

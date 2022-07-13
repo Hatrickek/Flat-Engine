@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include <random>
 #include "utils/log.h"
+#include "utils/utility.h"
 namespace FlatEngine {
 	class SSAO {
 	public:
@@ -22,16 +23,16 @@ namespace FlatEngine {
 		void EndSSAOTexture();
 		void BeginSSAOBlurTexture();
 		void EndSSAOBlurTexture();
-		static int SetKernelSize(static int value);
+		static int SetKernelSize(int value);
 		static float SetRadius(float value);
 		static float SetSample(float value);
-		void SetupSSAOShader(Shader* m_shader_ssao, Shader* m_shader_ssao_blur);
+		void SetupSSAOShader(Ref<Shader> m_shader_ssao, Ref<Shader> m_shader_ssao_blur);
 	private:
 		static unsigned int width, height;
 		std::vector<glm::vec3> ssaoKernel;
 
-		static Shader* shader_ssao;
-		static Shader* shader_ssao_blur;
+		static Ref<Shader> shader_ssao;
+		static Ref<Shader> shader_ssao_blur;
 
 		static float m_lerp(float a, float b, float f);
 	};

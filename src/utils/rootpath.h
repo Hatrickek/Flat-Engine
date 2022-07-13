@@ -1,2 +1,4 @@
 #pragma once
-#define ROOTPATH "C:/Users/Halim/Desktop/Projects/FlatEngine"
+#include <string>
+#include <filesystem>
+static std::filesystem::path ROOTPATH;

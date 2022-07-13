@@ -1,17 +1,19 @@
 #include "sceneSerializer.h"
+
 #include <fstream>
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
-#include "entity.h"
+
+#include "core/entity.h"
 #include "render/model.h"
 #include "resources.h"
+#include "utils/log.h"
+#include "core/components.h"
 
 namespace YAML {
 	template<>
-	struct convert<glm::vec3>
-	{
-		static Node encode(const glm::vec3& rhs)
-		{
+	struct convert<glm::vec3> {
+		static Node encode(const glm::vec3& rhs) {
 			Node node;
 			node.push_back(rhs.x);
 			node.push_back(rhs.y);
@@ -20,9 +22,8 @@ namespace YAML {
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec3& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 3)
+		static bool decode(const Node& node, glm::vec3& rhs) {
+			if(!node.IsSequence() || node.size() != 3)
 				return false;
 
 			rhs.x = node[0].as<float>();
@@ -33,10 +34,8 @@ namespace YAML {
 	};
 
 	template<>
-	struct convert<glm::vec4>
-	{
-		static Node encode(const glm::vec4& rhs)
-		{
+	struct convert<glm::vec4> {
+		static Node encode(const glm::vec4& rhs) {
 			Node node;
 			node.push_back(rhs.x);
 			node.push_back(rhs.y);
@@ -46,9 +45,8 @@ namespace YAML {
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec4& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 4)
+		static bool decode(const Node& node, glm::vec4& rhs) {
+			if(!node.IsSequence() || node.size() != 4)
 				return false;
 
 			rhs.x = node[0].as<float>();
@@ -61,16 +59,14 @@ namespace YAML {
 }
 
 namespace FlatEngine {
-	SceneSerializer::SceneSerializer(const Ref<Scene>& scene) : m_Scene(scene){}
+	SceneSerializer::SceneSerializer(const Ref<Scene>& scene) : m_Scene(scene) {}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v)
-	{
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v) {
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
 		return out;
 	}
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
-	{
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v) {
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << YAML::EndSeq;
 		return out;
@@ -84,14 +80,14 @@ namespace FlatEngine {
 		if(entity.HasComponent<TagComponent>()) {
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap;
-			auto &tag = entity.GetComponent<TagComponent>().Tag;
+			auto& tag = entity.GetComponent<TagComponent>().Tag;
 			out << YAML::Key << "Tag" << YAML::Value << tag;
-			out << YAML::EndMap; 
+			out << YAML::EndMap;
 		}
 		if(entity.HasComponent<TransformComponent>()) {
 			out << YAML::Key << "TransformComponent";
 			out << YAML::BeginMap;
-			auto &tc = entity.GetComponent<TransformComponent>();
+			auto& tc = entity.GetComponent<TransformComponent>();
 
 			out << YAML::Key << "Translation" << YAML::Value << tc.Translation;
 			out << YAML::Key << "Rotation" << YAML::Value << tc.Rotation;
@@ -105,7 +101,7 @@ namespace FlatEngine {
 			auto& mrc = entity.GetComponent<MeshRendererComponent>();
 
 			out << YAML::Key << "Model" << YAML::Value << mrc.model->m_Path;
-			out << YAML::Key << "Color" << YAML::Value << mrc.color;
+			out << YAML::Key << "Color" << YAML::Value << mrc.diffuseColor;
 			out << YAML::Key << "Shader Fragment" << YAML::Value << mrc.shader->m_fragmentPath;
 			out << YAML::Key << "Shader Vertex" << YAML::Value << mrc.shader->m_vertexPath;
 			out << YAML::EndMap;
@@ -127,14 +123,14 @@ namespace FlatEngine {
 	void SceneSerializer::Serialize(const std::string& filePath) {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
+		out << YAML::Key << "Scene" << YAML::Value << "Untitled"; //TODO: Scene names.
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->m_Registry.each([&](auto entityID) {
-			Entity entity = { entityID, m_Scene.get()};
+			Entity entity = { entityID, m_Scene.get() };
 			if(!entity)
 				return;
 			SerializeEntity(out, entity);
-		});
+			});
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
 
@@ -147,44 +143,45 @@ namespace FlatEngine {
 		try {
 			data = YAML::LoadFile(filePath);
 		}
-		catch (YAML::ParserException& e) {
+		catch(YAML::ParserException& e) {
+			FE_LOG_WARN("{0}", e.msg);
 			return false;
 		}
-		if (!data["Scene"])
+		if(!data["Scene"])
 			return false;
 		std::string sceneName = data["Scene"].as<std::string>();
 		FE_LOG_INFO("Loading scene: '{}'", sceneName);
 
-		if (auto entities = data["Entities"]) {
-			for (auto entity : entities) {
+		if(auto entities = data["Entities"]) {
+			for(auto entity : entities) {
 				uint64_t uuid = entity["Entity"].as<uint64_t>(); //TODO:
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
-				if (tagComponent)
+				if(tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
 				Entity desEntity = m_Scene->CreateEntity(name);
 
-				if (auto transformComponent = entity["TransformComponent"] ) {
+				if(auto transformComponent = entity["TransformComponent"]) {
 					auto& tc = desEntity.GetComponent<TransformComponent>();
-					tc.Translation	= transformComponent["Translation"].as<glm::vec3>();
-					tc.Rotation		= transformComponent["Rotation"].as<glm::vec3>();
-					tc.Scale		= transformComponent["Scale"].as<glm::vec3>();
+					tc.Translation = transformComponent["Translation"].as<glm::vec3>();
+					tc.Rotation = transformComponent["Rotation"].as<glm::vec3>();
+					tc.Scale = transformComponent["Scale"].as<glm::vec3>();
 				}
 
 				if(auto meshRendererComponent = entity["MeshRendererComponent"]) {
 					auto& mrc = desEntity.AddComponent<MeshRendererComponent>();
 					const std::string& modelPath = meshRendererComponent["Model"].as<std::string>();
-					Ref<Model> model = CreateRef<Model>(modelPath); 
+					Ref<Model> model = CreateRef<Model>(modelPath);
 					if(!model->meshes.empty()) {
 						mrc.model = model;
 					}
 					else {
 						mrc.model = Resources::GetDefaultCube();
 					}
-					mrc.color = meshRendererComponent["Color"].as<glm::vec4>();
-					const std::string vertexPath	= meshRendererComponent["Shader Vertex"].as<std::string>();
-					const std::string fragmenthPath	= meshRendererComponent["Shader Fragment"].as<std::string>();
+					mrc.diffuseColor = meshRendererComponent["Color"].as<glm::vec4>();
+					const std::string vertexPath = meshRendererComponent["Shader Vertex"].as<std::string>();
+					const std::string fragmenthPath = meshRendererComponent["Shader Fragment"].as<std::string>();
 					Ref<Shader> shader = CreateRef<Shader>(vertexPath.c_str(), fragmenthPath.c_str());
 					mrc.shader = shader;
 				}
@@ -198,5 +195,4 @@ namespace FlatEngine {
 		}
 		return true;
 	}
-
 }
