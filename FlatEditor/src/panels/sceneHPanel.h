@@ -11,6 +11,7 @@ namespace FlatEngine {
 		static void DrawPanel();
 		static void DrawInspectorPanel();
 		static void DrawEntityNode(Entity entity);
+		static void ClearSelectionContext();
 		static Entity GetSelectedEntity();
 	private:
 		static Entity m_SelectionContext;

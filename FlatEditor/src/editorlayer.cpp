@@ -87,12 +87,6 @@ namespace FlatEngine {
 		Renderer::BeginRendering();
 		Draw::RenderQuad();
 		Renderer::EndRendering();
-
-		if(Input::GetKeyDown(Key::F)) {
-			Ref<Scene> newScene = CreateRef<Scene>();
-			m_ActiveScene = newScene;
-		}
-
 	}
 	void EditorLayer::OnImGuiRender() {
 		EditorShortcuts();
@@ -133,7 +127,7 @@ namespace FlatEngine {
 				if(ImGui::BeginMenu("Open Recent")) {
 					for(auto& scene : PanelSettings::lastOpenedScenes) {
 						if(!scene.empty()) {
-							//TODO:FIX
+							//TODO:Currently this is sometimes causing crash while loading any recent scene.
 							const char* name = scene.c_str();
 							if(ImGui::MenuItem(name)) {
 								if(!OpenScene(scene)) {
@@ -321,6 +315,7 @@ namespace FlatEngine {
 		return m_ActiveScene;
 	}
 	void EditorLayer::SetActiveScene(Ref<Scene> scene) {
+		SceneHPanel::ClearSelectionContext();
 		m_ActiveScene = scene;
 	}
 	void EditorLayer::SetEditorState(EditorState state) {

@@ -44,6 +44,9 @@ namespace FlatEngine {
 		DrawInspectorPanel();
 		ImGui::End();
 	}
+	void SceneHPanel::ClearSelectionContext(){
+		m_SelectionContext = {};
+	}
 	Entity SceneHPanel::GetSelectedEntity() {
 		return m_SelectionContext;
 	}
@@ -199,11 +202,11 @@ namespace FlatEngine {
 	void SceneHPanel::DrawComponents(Entity entity) {
 		if(entity.HasComponent<TagComponent>()) {
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
-			char buffer[128] = {};
+			char buffer[256] = {};
 			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 			if(renameEntity)
 				ImGui::SetKeyboardFocusHere();
-			if(ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
+			if(ImGui::InputText("##Tag", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
 				tag = std::string(buffer);
 			}
 		}
