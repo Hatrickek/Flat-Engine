@@ -47,6 +47,12 @@ namespace FlatEngine {
 			unsigned int specularNr = 1;
 			unsigned int normalNr = 1;
 			unsigned int heightNr = 1;
+			if(textures.size() > 0) {
+				shader.setBool("sampleTexture", true);
+			}
+			else {
+				shader.setBool("sampleTexture", false);
+			}
 			for(unsigned int i = 0; i < textures.size(); i++) {
 				glActiveTexture(GL_TEXTURE0 + i);
 				std::string number;
@@ -62,12 +68,6 @@ namespace FlatEngine {
 
 				glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
 				glBindTexture(GL_TEXTURE_2D, textures[i].m_ID);
-			}
-			if(textures.size() > 0) {
-				shader.setBool("sampleTexture", true);
-			}
-			else {
-				shader.setBool("sampleTexture", false);
 			}
 
 			for(unsigned int i = 0; i < colors.size(); i++) {

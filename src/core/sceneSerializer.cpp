@@ -76,7 +76,6 @@ namespace FlatEngine {
 		out << YAML::BeginMap;
 		out << YAML::Key << "Entity" << YAML::Value << "3131"; //TODO: Entity ID
 
-		// TagComponent
 		if(entity.HasComponent<TagComponent>()) {
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap;
@@ -101,7 +100,7 @@ namespace FlatEngine {
 			auto& mrc = entity.GetComponent<MeshRendererComponent>();
 
 			out << YAML::Key << "Model" << YAML::Value << mrc.model->m_Path;
-			out << YAML::Key << "Color" << YAML::Value << mrc.diffuseColor;
+			out << YAML::Key << "Color" << YAML::Value << mrc.colors[0];
 			out << YAML::Key << "Shader Fragment" << YAML::Value << mrc.shader->m_fragmentPath;
 			out << YAML::Key << "Shader Vertex" << YAML::Value << mrc.shader->m_vertexPath;
 			out << YAML::EndMap;
@@ -114,6 +113,17 @@ namespace FlatEngine {
 			out << YAML::Key << "Type" << YAML::Value << prc.primitive;
 			out << YAML::Key << "Color" << YAML::Value << prc.color;
 
+			out << YAML::EndMap;
+		}
+		if(entity.HasComponent<LightComponent>()){
+			out << YAML::Key << "LightComponent";
+			out << YAML::BeginMap;
+			auto& lc = entity.GetComponent<LightComponent>();
+
+			out << YAML::Key << "Enabled" << YAML::Value << lc.enabled;
+			out << YAML::Key << "Color" << YAML::Value << lc.color;
+			out << YAML::Key << "Type" << YAML::Value << lc.type;
+			
 			out << YAML::EndMap;
 		}
 
@@ -179,7 +189,7 @@ namespace FlatEngine {
 					else {
 						mrc.model = Resources::GetDefaultCube();
 					}
-					mrc.diffuseColor = meshRendererComponent["Color"].as<glm::vec4>();
+					mrc.colors[0] = meshRendererComponent["Color"].as<glm::vec4>();
 					const std::string vertexPath = meshRendererComponent["Shader Vertex"].as<std::string>();
 					const std::string fragmenthPath = meshRendererComponent["Shader Fragment"].as<std::string>();
 					Ref<Shader> shader = CreateRef<Shader>(vertexPath.c_str(), fragmenthPath.c_str());
@@ -190,6 +200,12 @@ namespace FlatEngine {
 					Primitive primitive = static_cast<Primitive>(primitiveRendererComp["Type"].as<int>());
 					prc.primitive = primitive;
 					prc.color = primitiveRendererComp["Color"].as<glm::vec4>();
+				}
+				if(auto lightComp = entity["LightComponent"]){
+					auto& lc = desEntity.AddComponent<LightComponent>();
+					lc.color = lightComp["Color"].as<glm::vec4>();
+					lc.enabled = lightComp["Enabled"].as<bool>();
+					lc.type = static_cast<LightType>(lightComp["Type"].as<int>());
 				}
 			}
 		}

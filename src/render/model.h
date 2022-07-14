@@ -187,8 +187,8 @@ namespace FlatEngine {
 			int width, height, nrComponents;
 			unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 			if (data) {
-				GLenum format;
-				GLenum internalFormat;
+				GLenum format = 0;
+				GLenum internalFormat = 0;
 				if (nrComponents == 1)
 					format = GL_RED;
 				else if (nrComponents == 3) {

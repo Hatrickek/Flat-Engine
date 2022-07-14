@@ -89,11 +89,13 @@ namespace FlatEngine {
 	}
 	template<>
 	void Scene::OnComponentAdded<MeshRendererComponent>(Entity entity, MeshRendererComponent& component) {
-		if(!component.model) { component.model = Resources::GetDefaultCube(); }
+		if(!component.model) { 
+			component.model = Resources::GetDefaultCube(); 
+		}
 		if(!component.shader) {
 			component.shader = Resources::GetDefaultShader();
-			component.diffuseColor = WHITE;
 		}
+		component.colors = component.model->colors;
 	}
 	template<>
 	void Scene::OnComponentAdded<PrimitiveRendererComponent>(Entity entity, PrimitiveRendererComponent& component) {

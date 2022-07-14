@@ -61,10 +61,11 @@ namespace FlatEngine {
 		Ref<Model> model = nullptr;
 		glm::mat4 m_model = glm::mat4(1.0f);
 		Ref<Shader> shader = nullptr;
-		glm::vec4 diffuseColor = BLANK;
+		std::vector<glm::vec4> colors;
 		MeshRendererComponent() = default;
 		MeshRendererComponent(Ref<Model> model, Ref<Shader> shader, glm::vec4 diffuseColor = WHITE)
-			: model(std::move(model)), shader(std::move(shader)), diffuseColor(diffuseColor) {
+			: model(std::move(model)), shader(std::move(shader)){
+			 colors[0] = (diffuseColor); 
 		}
 	};
 	struct PrimitiveRendererComponent {
