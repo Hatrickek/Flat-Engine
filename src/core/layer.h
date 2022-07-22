@@ -12,7 +12,8 @@ namespace FlatEngine{
 		virtual void OnUpdate(float DeltaTime) {}
 		virtual void OnImGuiRender(){}
 		//virtual void OnEvent()
-		
+
+		 Layer& Get() { return *this;}
 		const std::string& GetName() const {return m_DebugName;}
 	protected:
 		std::string m_DebugName;

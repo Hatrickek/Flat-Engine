@@ -15,15 +15,9 @@ namespace FlatEngine {
 			catch(YAML::ParserException& e) {
 				return;
 			}
-			auto lssp = data["LastSaveScenePath"];
-			if(!lssp.IsNull()) {
-				PanelSettings::lastSaveScenePath = lssp.as<std::string>();
-			}
 			auto losp = data["LastOpenedScenes"];
 			if(!losp.IsNull()) {
-				for(auto scene : losp) {
-					PanelSettings::lastOpenedScenes.emplace_back(scene.as<std::string>());
-				}
+				PanelSettings::lastOpenedScenes = losp.as<std::vector<std::string>>();
 			}
 			FE_LOG_INFO("Loaded config: '{}'", path.filename().string());
 		}
@@ -34,7 +28,6 @@ namespace FlatEngine {
 	void EditorConfig::SaveInternalConfig() {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "LastSaveScenePath" << YAML::Value << PanelSettings::lastSaveScenePath;
 
 		out << YAML::Key << "LastOpenedScenes" << YAML::Value << YAML::BeginSeq;
 		for(auto scene : PanelSettings::lastOpenedScenes) {
@@ -86,6 +79,6 @@ namespace FlatEngine {
 		}
 	}
 	void EditorConfig::SaveConfig(std::filesystem::path path) {
-		
+
 	}
 }

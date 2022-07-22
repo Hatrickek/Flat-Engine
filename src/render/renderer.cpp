@@ -17,7 +17,7 @@ namespace FlatEngine {
 			frameBufferSize.x = Window::SCR_WIDTH;
 			frameBufferSize.y = Window::SCR_HEIGHT;
 		}
-		Renderer::ResizeBuffers();
+		ResizeBuffers();
 	}
 	void Renderer::ResizeBuffers() {
 		//TODO: @INCOMPLETE MAKE THIS MORE GENERIC AND FLEXIBLE.	
@@ -27,7 +27,7 @@ namespace FlatEngine {
 		if(m_gBuffer != nullptr) m_gBuffer->RegenerateBuffers(frameBufferSize.x, frameBufferSize.y);
 		if(m_SSAOBuffer != nullptr) m_SSAOBuffer->RegenerateBuffers(frameBufferSize.x, frameBufferSize.y);
 		glViewport(0, 0, frameBufferSize.x, frameBufferSize.y);
-	}
+	}		
 	void Renderer::InitRenderer() {
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_MULTISAMPLE);
@@ -44,13 +44,13 @@ namespace FlatEngine {
 		m_fBuffer->End();
 	}
 	void Renderer::CreateFrameBuffer(){
-		m_fBuffer = CreateRef<FBuffer>(Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		m_fBuffer = CreateRef<FBuffer>((unsigned int)Window::GetWindowSize().x, (unsigned int)Window::GetWindowSize().y);
 	}
 	void Renderer::CreateGBuffer() {
-		m_gBuffer = CreateRef<GBuffer>(Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		m_gBuffer = CreateRef<GBuffer>((unsigned int)Window::GetWindowSize().x, (unsigned int)Window::GetWindowSize().y);
 	}
 	void Renderer::CreateSSAOBuffers() {
-		m_SSAOBuffer = CreateRef<SSAO>(Window::SCR_WIDTH, Window::SCR_HEIGHT);
+		m_SSAOBuffer = CreateRef<SSAO>((unsigned int)Window::GetWindowSize().x, (unsigned int)Window::GetWindowSize().y);
 	}
 	Ref<SSAO> Renderer::GetSSAOBuffer() {
 		return m_SSAOBuffer;

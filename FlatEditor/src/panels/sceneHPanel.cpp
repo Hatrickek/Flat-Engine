@@ -44,7 +44,7 @@ namespace FlatEngine {
 		DrawInspectorPanel();
 		ImGui::End();
 	}
-	void SceneHPanel::ClearSelectionContext(){
+	void SceneHPanel::ClearSelectionContext() {
 		m_SelectionContext = {};
 	}
 	Entity SceneHPanel::GetSelectedEntity() {
@@ -268,11 +268,12 @@ namespace FlatEngine {
 		DrawComponent<MeshRendererComponent>("Mesh Renderer", entity, [](auto& component) {
 			auto& mesh = component.model;
 			auto& shader = component.shader;
-			auto& diffuseColor = component.diffuseColor;
+			auto& colors = component.colors;
 			auto& textures = component.model->textures_loaded;
 			ImGui::Text("Model: %s", component.model->name.c_str());
 			ImGui::Text("Textures: %d", textures.size());
-			ImGui::ColorEdit4("Diffuse color", glm::value_ptr(diffuseColor));
+			for(int i = 0; i < colors.size(); i++)
+				ImGui::ColorEdit4("Diffuse color", glm::value_ptr(colors[i]));
 			});
 		DrawComponent<PrimitiveRendererComponent>("Primitive Renderer", entity, [](auto& component) {
 			auto& primitive = component.primitive;

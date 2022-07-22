@@ -8,13 +8,14 @@
 #include "panels/panelSettings.h"
 #include "core/resources.h"
 #include <filesystem>
-#include <algorithm>
+
 namespace FlatEngine {
 	EditorLayer* EditorLayer::m_Instance = nullptr;
 	EditorLayer::EditorLayer() : Layer("Editor Layer") {
 		m_Instance = this;
 	}
 	void EditorLayer::OnAttach() {
+		
 		Renderer::SetFrameBufferSizeType(Renderer::FrameBufferSizeType::Custom);
 		Renderer::InitRenderer();
 		Renderer::CreateFrameBuffer();
@@ -30,27 +31,11 @@ namespace FlatEngine {
 		Renderer::GetSSAOBuffer()->SetupSSAOShader(Resources::GetSSAOShader(), Resources::GetSSAOBlurShader());
 		Input::SetCursorState(Input::CursorState::NORMAL, Window::GetOpenGLWindow());
 
-		//test code.
-		//Model rsr_model(FileSystem::getPath("resources/objects/911rsr.obj"));
-		//Model patrick_model(FileSystem::getPath("resources/objects/patrick_animated/patrick_animated.obj"));
-
 		m_ActiveScene = CreateRef<Scene>();
-
-		//Entity rsr = m_ActiveScene->CreateEntity("RsrModel");
-		//rsr.GetComponent<TransformComponent>().Scale = glm::vec3(1.5f);
-		//rsr.GetComponent<TransformComponent>().Translation = glm::vec3(-1.0f, 0.2, -2.0);
-		//rsr.AddComponent<MeshRendererComponent>(CreateRef<Model>(rsr_model), Resources::GetDefaultShader(), WHITE);
-
-		//Entity patrick = m_ActiveScene->CreateEntity("PatrickModel");
-		//patrick.GetComponent<TransformComponent>().Scale = glm::vec3(.3f);
-		//patrick.GetComponent<TransformComponent>().Translation = glm::vec3(2.5f, 0.1, -3.0);
-		//patrick.GetComponent<TransformComponent>().Rotation = glm::vec3(0, 180, 0);
-		//patrick.AddComponent<MeshRendererComponent>(CreateRef<Model>(patrick_model), Resources::GetDefaultShader(), BLANK);
 
 		Entity pointLight = m_ActiveScene->CreateEntity("Point Light");
 		pointLight.AddComponent<LightComponent>().color = glm::vec4(0.5f);
 		pointLight.GetComponent<TransformComponent>().Translation = glm::vec3(0.0f, 6.0f, 0.0f);
-
 	}
 	void EditorLayer::OnDetach() {
 		EditorConfig::SaveInternalConfig();
@@ -62,10 +47,10 @@ namespace FlatEngine {
 		Renderer::ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		Renderer::Clear();
 
-		Renderer::GetGbuffer()->Begin();
 		glm::mat4 projection = Renderer::GetCamera(0)->GetProjectionMatrix();
 		glm::mat4 view = Renderer::GetCamera(0)->GetViewMatrix();
-		glm::mat4 model = glm::mat4(1.0f);
+
+		Renderer::GetGbuffer()->Begin();
 		Resources::GetSSAOGeometryShader()->use();
 		Resources::GetSSAOGeometryShader()->setMat4("projection", projection);
 		Resources::GetSSAOGeometryShader()->setMat4("view", view);
@@ -87,12 +72,13 @@ namespace FlatEngine {
 		Renderer::BeginRendering();
 		Draw::RenderQuad();
 		Renderer::EndRendering();
+
 	}
 	void EditorLayer::OnImGuiRender() {
 		EditorShortcuts();
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
+		const ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
 			ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoCollapse |
 			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove |
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
@@ -128,10 +114,10 @@ namespace FlatEngine {
 					for(auto& scene : PanelSettings::lastOpenedScenes) {
 						if(!scene.empty()) {
 							//TODO:Currently this is sometimes causing crash while loading any recent scene.
-							const char* name = scene.c_str();
-							if(ImGui::MenuItem(name)) {
+							if(ImGui::MenuItem(scene.c_str())) {
 								if(!OpenScene(scene)) {
 									scene.erase();
+									break;
 								}
 							}
 						}
@@ -172,11 +158,12 @@ namespace FlatEngine {
 		}
 		if(ImGui::BeginMenuBar()) {
 			ImGui::SetCursorPos(ImVec2(Window::SCR_WIDTH * 0.5f, 0));
+			//TODO:
 			if(ImGui::MenuItem(">>")) {
-				EditorLayer::SetEditorState(EditorState::Play);
+				//SetEditorState(EditorState::Play);
 			}
 			if(ImGui::MenuItem("||")) {
-				EditorLayer::SetEditorState(EditorState::Edit);
+				//SetEditorState(EditorState::Edit);
 
 			}
 			ImGui::EndMenuBar();
@@ -194,20 +181,20 @@ namespace FlatEngine {
 	void EditorLayer::EditorShortcuts() {
 		if(Input::GetKey(Key::LeftControl)) {
 			if(Input::GetKeyDown(Key::N)) {
-				EditorLayer::NewScene();
+				NewScene();
 			}
 			if(Input::GetKeyDown(Key::S)) {
-				EditorLayer::SaveScene();
+				SaveScene();
 			}
 			if(Input::GetKeyDown(Key::O)) {
-				EditorLayer::OpenScene();
+				OpenScene();
 			}
 			if(Input::GetKey(Key::LeftShift) && Input::GetKeyDown(Key::S)) {
-				EditorLayer::SaveSceneAs();
+				SaveSceneAs();
 			}
 			//@TEMP code because Input::GetKeyDown() works the same way as GetKey().
 			if(Input::GetKeyDown(Key::D)) {
-				EditorLayer::GetActiveScene()->DuplicateEntity(SceneHPanel::GetSelectedEntity());
+				GetActiveScene()->DuplicateEntity(SceneHPanel::GetSelectedEntity());
 			}
 			//------------
 		}
@@ -219,7 +206,7 @@ namespace FlatEngine {
 	}
 	void EditorLayer::NewScene() {
 		Ref<Scene> newScene = CreateRef<Scene>();
-		EditorLayer::SetActiveScene(newScene);
+		SetActiveScene(newScene);
 	}
 	void EditorLayer::OpenScene() {
 		std::string filepath = FileDialogs::OpenFile("FlatEngine Scene (*.scene)\0*.scene\0");
@@ -235,18 +222,14 @@ namespace FlatEngine {
 			FE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return false;
 		}
-		if(PanelSettings::lastOpenedScenes.size() > 8) {
+		if(PanelSettings::lastOpenedScenes.size() >= 8) {
 			PanelSettings::lastOpenedScenes.erase(PanelSettings::lastOpenedScenes.begin());
 		}
-		if(std::find(PanelSettings::lastOpenedScenes.begin()
-			, PanelSettings::lastOpenedScenes.end(), path.string()) != PanelSettings::lastOpenedScenes.end()) {
-			PanelSettings::lastOpenedScenes.emplace_back(path.string());
-		}
-
+		PanelSettings::lastOpenedScenes.emplace_back(path.string());
 		Ref<Scene> newScene = CreateRef<Scene>();
 		SceneSerializer serializer(newScene);
 		if(serializer.Deserialize(path.string())) {
-			EditorLayer::SetActiveScene(newScene);
+			SetActiveScene(newScene);
 		}
 		return true;
 	}
@@ -256,7 +239,7 @@ namespace FlatEngine {
 			serializer.Serialize(PanelSettings::lastSaveScenePath);
 		}
 		else {
-			EditorLayer::SaveSceneAs();
+			SaveSceneAs();
 		}
 	}
 	void EditorLayer::SaveSceneAs() {
@@ -290,6 +273,16 @@ namespace FlatEngine {
 		ImGui::Begin("DebugInfo");
 		ImGui::Text("Lighting");
 		ImGui::SliderFloat("Ambient", &Lighting::ambientLight, 0, 1, "%.2f");
+		ImGui::Separator();
+		ImGui::Text("Bloom");
+		static bool bloom_toggle;
+		if(ImGui::Checkbox("Toggle", &bloom_toggle)) {
+			Resources::GetBloomShader()->setBool("bloom", bloom_toggle);
+		}
+		static float exposure = 1.0f;
+		if(ImGui::SliderFloat("Exposure", &exposure, 0.0f, 1.0f, "%.2f")) {
+			Resources::GetBloomShader()->setFloat("exposure", exposure);
+		}
 		ImGui::Separator();
 		ImGui::Text("SSAO");
 		ImGui::SameLine();

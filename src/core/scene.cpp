@@ -40,6 +40,16 @@ namespace FlatEngine {
 		}
 		return newEntity;
 	}
+	Entity Scene::FindEntity(const std::string& name) {
+		const auto group = m_Registry.view<TagComponent>();
+		for(const auto entity : group) {
+			auto& tag = group.get<TagComponent>(entity);
+			if(tag.Tag == name) {
+				return Entity{entity, this};
+			}
+		}
+		return {};
+	}
 	void Scene::OnUpdate(float deltaTime) {
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
@@ -54,7 +64,7 @@ namespace FlatEngine {
 				});
 		}
 		{
-			const auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
+			const auto group = m_Registry.view<TransformComponent, MeshRendererComponent>();
 			for(const auto entity : group) {
 				auto [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
 				Draw::DrawModel(meshrenderer, transform.Translation, transform.Scale, transform.Rotation);
@@ -69,14 +79,23 @@ namespace FlatEngine {
 		}
 		{
 			const auto group = m_Registry.view<TransformComponent, LightComponent>();
+			static int i = 0; //@TEMP
 			for(const auto entity : group) {
 				auto [transform, light] = group.get<TransformComponent, LightComponent>(entity);
-				//Draw::DrawQuad(*Resources::GetDefaultShader(), light.color, transform.Translation, transform.Scale, transform.Rotation);
-				if(light.enabled) {
-					Resources::GetLightingShader()->use();
-					glm::vec3 lightPosView = glm::vec3(Renderer::GetCamera(0)->GetViewMatrix() * glm::vec4(transform.Translation, 1.0));
-					Resources::GetLightingShader()->setVec3("light.Position", lightPosView);
-					Resources::GetLightingShader()->setVec3("light.Color", light.color);
+				const float linear = 0.09f;
+				const float quadratic = 0.032f;
+				Resources::GetLightingShader()->use();
+				glm::vec3 lightPosView = glm::vec3(Renderer::GetCamera(0)->GetViewMatrix() * glm::vec4(transform.Translation, 1.0));
+				Resources::GetLightingShader()->setVec3(std::format("light[{}].Position", i), lightPosView);
+				Resources::GetLightingShader()->setVec3(std::format("light[{}].Color", i), light.color);
+				Resources::GetLightingShader()->setFloat(std::format("light[{}].Linear", i), linear);
+				Resources::GetLightingShader()->setFloat(std::format("light[{}].Quadratic", i), quadratic);
+				//@TEMP
+				if(i > group.size_hint()) {
+					i = 0;
+				}
+				else {
+					i++;
 				}
 			}
 		}
@@ -89,8 +108,8 @@ namespace FlatEngine {
 	}
 	template<>
 	void Scene::OnComponentAdded<MeshRendererComponent>(Entity entity, MeshRendererComponent& component) {
-		if(!component.model) { 
-			component.model = Resources::GetDefaultCube(); 
+		if(!component.model) {
+			component.model = Resources::GetDefaultCube();
 		}
 		if(!component.shader) {
 			component.shader = Resources::GetDefaultShader();

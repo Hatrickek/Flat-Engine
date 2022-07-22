@@ -10,7 +10,7 @@ namespace FlatEngine {
 		m_model = glm::scale(m_model, scale);
 		mrc.shader->setMat4("model", m_model);
 		if(mrc.model) {
-			mrc.model->Draw(*mrc.shader);
+			mrc.model->Draw(*mrc.shader, mrc);
 		}
 		mrc.shader->setVec4("diffuse_color", WHITE);
 	}
@@ -36,7 +36,7 @@ namespace FlatEngine {
 		m_model = glm::rotate(m_model, rotation.y, glm::vec3(0, 1, 0));
 		m_model = glm::rotate(m_model, rotation.z, glm::vec3(0, 0, 1));
 		m_model = glm::scale(m_model, scale);
-		shader.setVec4("color", diffuseColor);
+		shader.setVec4("diffuse_color", diffuseColor);
 		shader.setMat4("model", m_model);
 		RenderCube();
 		shader.setVec4("color", BLANK);
@@ -48,14 +48,14 @@ namespace FlatEngine {
 		m_model = glm::rotate(m_model, rotation.y, glm::vec3(0, 1, 0));
 		m_model = glm::rotate(m_model, rotation.z, glm::vec3(0, 0, 1));
 		m_model = glm::scale(m_model, scale);
-		shader.setVec4("color", diffuseColor);
+		shader.setVec4("diffuse_color", diffuseColor);
 		shader.setMat4("model", m_model);
 		RenderQuad();
 		shader.setVec4("color", BLANK);
 	}
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;
-	void Draw::RenderCube() {
+		void Draw::RenderCube() {
 		if(cubeVAO == 0) {
 			float vertices[] = {
 				// back face

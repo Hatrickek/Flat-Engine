@@ -25,10 +25,11 @@ namespace FlatEngine {
 	// Default camera values
 	const float YAW = -90.0f;
 	const float PITCH = 0.0f;
-	const float SPEED = 2.5f;
+	const float SPEED = 7.5f;
 	const float SENSITIVITY = .1f;
 	const float ZOOM = 45.0f;
-
+	const float NEARCLIP = 0.1f;
+	const float FARCLIP =  80.0f; 
 	// An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 	class Camera {
 	public:
@@ -65,7 +66,7 @@ namespace FlatEngine {
 		}
 
 		glm::mat4 GetProjectionMatrix() const {
-			return glm::perspective(glm::radians(Zoom), (float)Window::SCR_WIDTH / (float)Window::SCR_HEIGHT, 0.1f, 50.0f);
+			return glm::perspective(glm::radians(Zoom), (float)Window::SCR_WIDTH / (float)Window::SCR_HEIGHT, NEARCLIP, FARCLIP);
 		}
 		void SetYaw(float value) {
 			Yaw = value;
@@ -88,7 +89,6 @@ namespace FlatEngine {
 			if(cameraMod == CameraMod::FREE) {
 				static bool mouseLocked;
 				if(Input::GetMouseButtonDown(Mouse::Button1)) {
-					
 					if(Input::GetKey(Key::W))
 						ProcessKeyboard(FORWARD, Timestep::GetDeltaTime());
 					if(Input::GetKey(Key::S))
@@ -104,7 +104,6 @@ namespace FlatEngine {
 				else if(mouseLocked) {
 					mouseLocked = false;
 					Input::SetCursorState(Input::CursorState::NORMAL, Window::GetOpenGLWindow());
-					Input::SetCursorPosition(Window::GetWindowSize().x * 0.5f, Window::GetWindowSize().y * 0.5f);
 				}
 				//TODO: Right now these are getting updated directly from glfw callbacks in Input class.
 				// maybe update them here instead of there.

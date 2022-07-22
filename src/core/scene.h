@@ -1,7 +1,7 @@
 #pragma once
 #include "entt/entt.hpp"
 
-namespace FlatEngine{
+namespace FlatEngine {
 
 	class Entity;
 
@@ -14,6 +14,7 @@ namespace FlatEngine{
 		void DestroyEntity(Entity entity);
 		Entity DuplicateEntity(Entity entity);
 		void OnUpdate(float deltaTime);
+		Entity FindEntity(const std::string& name);
 
 		entt::registry m_Registry;
 		std::string sceneName = "Untitled";
@@ -24,5 +25,5 @@ namespace FlatEngine{
 		friend class Entity;
 		friend class SceneSerializer;
 		friend class SceneHPanel;
-	};	
+	};
 }

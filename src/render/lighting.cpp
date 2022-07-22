@@ -9,10 +9,6 @@ namespace FlatEngine {
 		Renderer::Clear();
 		Resources::GetLightingShader()->use();
 		// Update attenuation parameters
-		const float linear = 0.09f;
-		const float quadratic = 0.032f;
-		Resources::GetLightingShader()->setFloat("light.Linear", linear);
-		Resources::GetLightingShader()->setFloat("light.Quadratic", quadratic);
 		Resources::GetLightingShader()->setFloat("ambientLight", ambientLight);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Renderer::GetGbuffer()->gPosition);

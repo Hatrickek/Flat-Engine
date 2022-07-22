@@ -17,7 +17,10 @@
 #include <vector>
 #include "assimp_glm_helpers.h"
 #include "utils/log.h"
+
 namespace FlatEngine {
+	struct MeshRendererComponent;
+
 	class Model {
 	public:
 		std::vector<Texture> textures_loaded;
@@ -29,8 +32,7 @@ namespace FlatEngine {
 		bool gammaCorrection;
 	
 		Model(std::string const& path, bool gamma = false);
-
-		void Draw(Shader& shader);
+		void Draw(Shader& shader, const MeshRendererComponent& mrc);
 	
 		auto& GetBoneInfoMap() { return m_BoneInfoMap; }
 		int& GetBoneCount() { return m_BoneCounter; }
