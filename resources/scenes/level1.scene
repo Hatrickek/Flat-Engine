@@ -1,0 +1,227 @@
+Scene: Untitled
+Entities:
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left_1 Copy Copy
+    TransformComponent:
+      Translation: [18.5, 0, 1.49999881]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.49984026, 1, 0.299818158]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left_1 Copy
+    TransformComponent:
+      Translation: [-0.5, 0, 1.5]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.49987054, 1, 0.299825728]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Back_4
+    TransformComponent:
+      Translation: [4.65928555, -2.9984044e-06, 0.641683936]
+      Rotation: [-3.14159203, -0.000345168606, -3.14159226]
+      Scale: [2, 1, 0.299733043]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Back_3
+    TransformComponent:
+      Translation: [13.2781458, 3.57904071e-07, 0.638708949]
+      Rotation: [-3.14159203, -0.000345168606, -3.14159226]
+      Scale: [2, 1, 0.299733043]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Mid1
+    TransformComponent:
+      Translation: [8.96783257, 0, 3]
+      Rotation: [0, -5.96046448e-08, 0]
+      Scale: [6.74998236, 1, 0.299881995]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Back_1
+    TransformComponent:
+      Translation: [2.99999976, 0, -1.00000024]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.49974394, 1, 0.299794078]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Back_2
+    TransformComponent:
+      Translation: [15, 0, -1.00000024]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.49950075, 1, 0.299733281]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Right
+    TransformComponent:
+      Translation: [27, 0, 1.23850918]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [4.4991045, 1, 0.299884468]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left_1
+    TransformComponent:
+      Translation: [-6, 0, 1.50000036]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.5, 1, 0.299858093]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Right_3
+    TransformComponent:
+      Translation: [24, 0, 1.2385093]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [1.5, 1, 0.299882859]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Right_1
+    TransformComponent:
+      Translation: [22.8074017, 0, -0.261490762]
+      Rotation: [0, -5.96046448e-08, 0]
+      Scale: [1.49999607, 1, 0.299881995]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Right_2
+    TransformComponent:
+      Translation: [22.8074017, 0, 2.42952991]
+      Rotation: [0, -5.96046448e-08, 0]
+      Scale: [1.49999607, 1, 0.299881995]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left_3
+    TransformComponent:
+      Translation: [-4.82558727, 0, 2.71388769]
+      Rotation: [0, -5.96046448e-08, 0]
+      Scale: [1.49999607, 1, 0.299881995]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left_2
+    TransformComponent:
+      Translation: [-4.82558727, 0, -0.261492342]
+      Rotation: [0, -5.96046448e-08, 0]
+      Scale: [1.49999607, 1, 0.299881995]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Translation: [9.79745579, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [45, 0.200000003, 30]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [1, 1, 1, 1]
+  - Entity: 3131
+    TagComponent:
+      Tag: New Light
+    TransformComponent:
+      Translation: [8.00998497, 8.19313812, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Enabled: true
+      Color: [1, 1, 1, 1]
+      Type: 0
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Front
+    TransformComponent:
+      Translation: [9.06878376, 0, 6]
+      Rotation: [0, 0, 0]
+      Scale: [18.2999992, 1, 0.300000012]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Left
+    TransformComponent:
+      Translation: [-9, 0, 1.50000048]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [4.49986315, 1, 0.299931884]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs
+  - Entity: 3131
+    TagComponent:
+      Tag: Wall_Back
+    TransformComponent:
+      Translation: [8.70092201, 0, -3]
+      Rotation: [0, 0, 0]
+      Scale: [18, 1, 0.300000012]
+    MeshRendererComponent:
+      Model: resources/objects/cube.obj
+      Color: [1, 1, 1, 1]
+      Shader Fragment: resources/shaders/ssao_geometry.fs
+      Shader Vertex: resources/shaders/ssao_geometry.vs

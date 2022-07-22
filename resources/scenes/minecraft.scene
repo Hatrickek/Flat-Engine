@@ -1,0 +1,63 @@
+Scene: Untitled
+Entities:
+  - Entity: 3131
+    TagComponent:
+      Tag: Tree Copy
+    TransformComponent:
+      Translation: [-4, 1.10000002, -1]
+      Rotation: [0, 0, 0]
+      Scale: [0.200000003, 1.5, 0.200000003]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [0.637130797, 0.45163703, 0, 1]
+  - Entity: 3131
+    TagComponent:
+      Tag: Tree Copy
+    TransformComponent:
+      Translation: [-4, 3, -1]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [0.151898861, 1, 0, 1]
+  - Entity: 3131
+    TagComponent:
+      Tag: New Light
+    TransformComponent:
+      Translation: [5.43206835, 2.29014468, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    LightComponent:
+      Enabled: true
+      Color: [0.33976835, 0.33976835, 0.33976835, 1]
+      Type: 0
+  - Entity: 3131
+    TagComponent:
+      Tag: Tree
+    TransformComponent:
+      Translation: [0.300000012, 3, -2.9000001]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [0.151898861, 1, 0, 1]
+  - Entity: 3131
+    TagComponent:
+      Tag: Tree
+    TransformComponent:
+      Translation: [0.300000012, 0.600000024, -2.9000001]
+      Rotation: [0, 0, 0]
+      Scale: [0.200000003, 1.5, 0.200000003]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [0.637130797, 0.45163703, 0, 1]
+  - Entity: 3131
+    TagComponent:
+      Tag: Cube
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [10, 0.200000003, 10]
+    PrimitiveRendererComponent:
+      Type: 1
+      Color: [0.265871704, 0.525096536, 0, 1]
